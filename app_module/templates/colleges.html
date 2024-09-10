@@ -1,5 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Colleges Page{% endblock %}
+{% block title %}Programs Page{% endblock %}
 {% block content %}
-    <h1>This is the Colleges Page</h1>
-      {% endblock %}
+<form class="d-flex" role="search">
+  <select name="column-search form-select-sm" id="column-search" class="form-select-lg mb-3" aria-label="Small">
+    <option class="columns-options" value="College Code" selected>College Code</option>
+    <option class="columns-options" value="College Name">College Name</option>
+  </select>
+  <input class="form-control me-2" type="search" placeholder="Search" value="{{plchold}}" aria-label="Search">
+  <button class="btn btn-outline-secondary" type="submit">Search</button>
+  <button type="button" class="btn btn-success">Add College</button>
+</form>
+
+<br>
+
+<div class="recent-search-display">
+  <input id="recent-search" type="text" readonly value="{{searched_item}}">
+</div>
+
+<br>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">College Code</th>
+      <th scope="col">College Name</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for college in colleges %}
+    <tr>
+      <td>{{college[0]}}</td>
+      <td>{{college[1]}}</td>
+      <td><button class="edit-student">Edit</button></td>
+      <td><button class="delete-student">Delete</button></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

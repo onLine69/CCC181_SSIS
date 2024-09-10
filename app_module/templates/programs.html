@@ -1,5 +1,45 @@
 {% extends "base.html" %}
 {% block title %}Programs Page{% endblock %}
 {% block content %}
-    <h1>This is the Programs Page</h1>
-      {% endblock %}
+<form class="d-flex" role="search">
+  <select name="column-search form-select-sm" id="column-search" class="form-select-lg mb-3" aria-label="Small">
+    <option class="columns-options" value="Program Code" selected>Program Code</option>
+    <option class="columns-options" value="Program Name">Program Name</option>
+    <option class="columns-options" value="College Code">College Code</option>
+  </select>
+  <input class="form-control me-2" type="search" placeholder="Search" value="{{plchold}}" aria-label="Search">
+  <button class="btn btn-outline-secondary" type="submit">Search</button>
+  <button type="button" class="btn btn-success" href="/add">Add Program</button>
+</form>
+
+<br>
+
+<div class="recent-search-display">
+  <input id="recent-search" type="text" readonly value="{{searched_item}}">
+</div>
+
+<br>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Program Code</th>
+      <th scope="col">Program Name</th>
+      <th scope="col">College Code</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for program in programs %}
+    <tr>
+      <td>{{program[0]}}</td>
+      <td>{{program[1]}}</td>
+      <td>{{program[2]}}</td>
+      <td><button class="edit-student">Edit</button></td>
+      <td><button class="delete-student">Delete</button></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

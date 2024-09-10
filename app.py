@@ -1,5 +1,9 @@
-from flask import Flask, redirect
-from app_module import app
+from app_module import start_app
+from dotenv import load_dotenv
 
-if __name__ == '__main__':
-	app.run(debug=True)
+load_dotenv('.env')
+
+app = start_app()
+
+#if __name__ == '__main__':
+#	start_app()
