@@ -1,24 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Programs Page{% endblock %}
 {% block content %}
-<form class="d-flex" role="search">
-  <select name="column-search form-select-sm" id="column-search" class="form-select-lg mb-3" aria-label="Small">
-    <option class="columns-options" value="Program Code" selected>Program Code</option>
-    <option class="columns-options" value="Program Name">Program Name</option>
-    <option class="columns-options" value="College Code">College Code</option>
+<form class="d-flex" role="search" action="#" method="post">
+  <select name="column-search" id="column-search" class="form-select-lg mb-3" aria-label="Small" data-selected-value="{{column_name}}">
+    <option class="columns-options" value="code" selected>Program Code</option>
+    <option class="columns-options" value="name">Program Name</option>
+    <option class="columns-options" value="college_code">College Code</option>
   </select>
-  <input class="form-control me-2" type="search" placeholder="Search" value="{{plchold}}" aria-label="Search">
+  <input class="form-control me-2" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search" required>
   <button class="btn btn-outline-secondary" type="submit">Search</button>
-  <button type="button" class="btn btn-success" href="/add">Add Program</button>
+  <button type="button" class="btn btn-success">Add Program</button>
 </form>
 
-<br>
-
-<div class="recent-search-display">
-  <input id="recent-search" type="text" readonly value="{{searched_item}}">
-</div>
-
-<br>
+<br><br>
 
 <table class="table table-hover">
   <thead>
