@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-user_bp = Blueprint('colleges',__name__)
+colleges_bp = Blueprint('colleges',__name__,  template_folder='app_module/templates/colleges')
 
-from . import controller
+from . import routes, controller
