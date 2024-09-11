@@ -10,10 +10,3 @@ def search(column, param):
     cur.execute(f"SELECT * FROM `colleges` WHERE {column} LIKE '%{param}%'")
     
     return cur.fetchall()
-
-
-def search(column, param):
-    cur = mysql.connection.cursor()
-    cur.execute(f"SELECT * FROM `colleges` WHERE {column} LIKE '%{param}%'")
-    
-    return cur.fetchall()
