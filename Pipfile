@@ -8,6 +8,8 @@ flask = "*"
 python-dotenv = "*"
 flask-mysql = "*"
 flask-mysqldb = "*"
+flask-wtf = "*"
+wtforms = "*"
 
 [dev-packages]
 

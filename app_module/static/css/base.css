@@ -28,19 +28,27 @@ main {
     color: aqua;
 }
 
-.d-flex {
+.operation-area{
     width: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 auto;
+}
+
+.operation-area #param-search{
+    width: 50%;
+    margin: 0 10px;
 }
 
 .btn{
     margin: 0 10px;
 }
 
-#column-search {
-    margin: auto 10px;
+.operation-area #column-search {
     cursor: pointer;
     font-size: medium;
+    margin: 0 10px;
 }
 
 .recent-search-display {

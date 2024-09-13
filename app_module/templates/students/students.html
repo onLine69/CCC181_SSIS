@@ -1,22 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Students Page{% endblock %}
+{% block search%}
+<div class="operation-area">
+  <form class="d-flex" role="search" action="#" method="post">
+    <select name="column-search" id="column-search" class="form-select-lg" data-selected-value="{{column_name}}">
+      <option class="columns-options" value="student_id" selected>ID Number</option>
+      <option class="columns-options" value="first_name">First Name</option>
+      <option class="columns-options" value="last_name">Last Name</option>
+      <option class="columns-options" value="program_code">Program</option>
+      <option class="columns-options" value="year_level">Year Level</option>
+      <option class="columns-options" value="gender">Gender</option>
+    </select>
+    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search"
+      value="{{ searched_item }}" aria-label="Search">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </form>
+  <button type="button" class="btn btn-success" id="add-item" data-url="{{ url_for('students.add') }}">Add Student</button>
+</div>
+{% endblock %}
+
 {% block content %}
-<form class="d-flex" role="search" action="#" method="post">
-  <select name="column-search" id="column-search" class="form-select-lg mb-3" aria-label="Small" data-selected-value="{{column_name}}">
-    <option class="columns-options" value="student_id" selected>ID Number</option>
-    <option class="columns-options" value="first_name">First Name</option>
-    <option class="columns-options" value="last_name">Last Name</option>
-    <option class="columns-options" value="program_code">Program</option>
-    <option class="columns-options" value="year_level">Year Level</option>
-    <option class="columns-options" value="gender">Gender</option>
-  </select>
-  <input class="form-control me-2" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search" required>
-  <button class="btn btn-outline-secondary" type="submit">Search</button>
-  <button type="button" class="btn btn-success">Add Student</button>
-</form>
-
 <br><br>
-
 <table class="table table-hover">
   <thead>
     <tr>
@@ -39,10 +44,16 @@
       <td>{{student[3]}}</td>
       <td>{{student[4]}}</td>
       <td>{{student[5]}}</td>
-      <td><button class="edit-student">Edit</button></td>
-      <td><button class="delete-student">Delete</button></td>
+      <td><button type="button" class="edit-student">Edit</button></td>
+      <td><button type="button" class="delete-student">Delete</button></td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<!-- This script is for the add button -->
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/addItemsButton.js") }}'></script>
+
+<!-- This is for the dropdown on the search bar -->
+<script type='text/javascript' src='{{ url_for("static", filename="javascript/dropdownSearch.js") }}'></script>
 {% endblock %}

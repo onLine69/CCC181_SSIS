@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Add Student Page{% endblock %}
+
+{% block search %}
+<h1>Student Add</h1>
+{% endblock %}
+{% block content %}
+<form action="#" method="post">
+    {{ form.csrf_token }}
+    <p >
+        {{form.id_number.label}} : {{form.id_number}}
+    </p>
+    <p>
+        {{form.first_name.label}} : {{form.first_name}}
+    </p>
+    <p>
+        {{form.last_name.label}} : {{form.last_name}}
+    </p>
+    <p>
+        {{form.program_code.label}} : {{form.program_code}}
+    </p>
+    <p>
+        {{form.year_level.label}} : {{form.year_level}}
+    </p>
+    <p>
+        {{form.gender.label}} : {{form.gender}}
+    </p>
+    <p>
+        {{form.add_student()}}
+    </p>
+</form>
+{% endblock %}

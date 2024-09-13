@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Programs Page{% endblock %}
-{% block content %}
-<form class="d-flex" role="search" action="#" method="post">
-  <select name="column-search" id="column-search" class="form-select-lg mb-3" aria-label="Small" data-selected-value="{{column_name}}">
-    <option class="columns-options" value="code" selected>College Code</option>
-    <option class="columns-options" value="name">College Name</option>
-  </select>
-  <input class="form-control me-2" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search" required>
-  <button class="btn btn-outline-secondary" type="submit">Search</button>
+{% block search%}
+<div class="operation-area">
+  <form class="d-flex" role="search" action="#" method="post">
+    <select name="column-search" id="column-search" class="form-select-lg" data-selected-value="{{column_name}}">
+      <option class="columns-options" value="code" selected>College Code</option>
+      <option class="columns-options" value="name">College Name</option>
+    </select>
+    <input class="form-control me-2" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}"
+      aria-label="Search">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </form>
   <button type="button" class="btn btn-success">Add College</button>
-</form>
+</div>
+{% endblock %}
 
+{% block content %}
 <br><br>
 
 <table class="table table-hover">

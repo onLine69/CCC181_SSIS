@@ -4,9 +4,8 @@ from . import programs_bp
 
 @programs_bp.route('/', methods=["POST", "GET"])
 def index():
-    if request.method == "POST":
-        search_column = request.form["column-search"]
-        search_param = request.form["param-search"]
-        return render_template('programs/programs.html', programs=search(search_column, search_param), column_name=search_column, searched_item=search_param)
+    if request.method == "POST" and request.form["param-search"] != "":
+        return render_template('programs/programs.html', programs=search(request.form["column-search"], request.form["param-search"]), 
+                               column_name=request.form["column-search"], searched_item=request.form["param-search"])
     else:
         return render_template('programs/programs.html', programs=displayAll())

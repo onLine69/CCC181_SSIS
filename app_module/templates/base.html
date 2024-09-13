@@ -37,13 +37,11 @@
     </nav>
     <br><br>
     <main>
+        {% block search %}
+        {% endblock %}
         {% block content %}
         {% endblock %}
     </main>
-    <!--
-        This is for the dropdown on the search bar
-    -->
-    <script type='text/javascript' src='{{ url_for("static", filename="javascript/dropdownSearch.js") }}'></script>
 </body>
 
 </html>
