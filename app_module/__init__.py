@@ -21,10 +21,12 @@ def start_app():
         BOOTSTRAP_SERVE_LOCAL=BOOTSTRAP_SERVE_LOCAL
     )
 
-    app.register_blueprint(students_bp)
+    app.register_blueprint(students_bp, url_prefix="/students")
     app.register_blueprint(programs_bp, url_prefix="/programs")
     app.register_blueprint(colleges_bp, url_prefix="/colleges")
 
     mysql.init_app(app)
     CSRFProtect(app)
     return app
+
+from . import routes

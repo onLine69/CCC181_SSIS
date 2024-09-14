@@ -1,27 +1,29 @@
 {% extends "base.html" %}
+
 {% block title %}Students Page{% endblock %}
-{% block search%}
+
+{% block search %}
 <div class="operation-area">
-  <form class="d-flex" role="search" action="#" method="post">
-    <select name="column-search" id="column-search" class="form-select-lg" data-selected-value="{{column_name}}">
-      <option class="columns-options" value="student_id" selected>ID Number</option>
-      <option class="columns-options" value="first_name">First Name</option>
-      <option class="columns-options" value="last_name">Last Name</option>
-      <option class="columns-options" value="program_code">Program</option>
-      <option class="columns-options" value="year_level">Year Level</option>
-      <option class="columns-options" value="gender">Gender</option>
+  <form class="d-flex" role="search" action="{{ url_for('students.search') }}" method="get">
+    <select name="column-search" id="column-search" class="form-select-lg">
+      <option class="columns-options" value="student_id" {% if column_name == 'student_id' %}selected{% endif %}>ID Number</option>
+      <option class="columns-options" value="first_name" {% if column_name == 'first_name' %}selected{% endif %}>First Name</option>
+      <option class="columns-options" value="last_name" {% if column_name == 'last_name' %}selected{% endif %}>Last Name</option>
+      <option class="columns-options" value="program_code" {% if column_name == 'program_code' %}selected{% endif %}>Program</option>
+      <option class="columns-options" value="year_level" {% if column_name == 'year_level' %}selected{% endif %}>Year Level</option>
+      <option class="columns-options" value="gender" {% if column_name == 'gender' %}selected{% endif %}>Gender</option>
     </select>
-    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search"
-      value="{{ searched_item }}" aria-label="Search">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
     <button class="btn btn-outline-secondary" type="submit">Search</button>
   </form>
-  <button type="button" class="btn btn-success" id="add-item" data-url="{{ url_for('students.add') }}">Add Student</button>
+  <form action="{{ url_for('students.add') }}" method="get">
+    <button type="submit" id="add-item" class="btn btn-success">Add Student</button>
+  </form>
 </div>
 {% endblock %}
 
 {% block content %}
-<br><br>
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -38,22 +40,28 @@
   <tbody>
     {% for student in students %}
     <tr>
-      <td>{{student[0]}}</td>
-      <td>{{student[1]}}</td>
-      <td>{{student[2]}}</td>
-      <td>{{student[3]}}</td>
-      <td>{{student[4]}}</td>
-      <td>{{student[5]}}</td>
-      <td><button type="button" class="edit-student">Edit</button></td>
-      <td><button type="button" class="delete-student">Delete</button></td>
+      <td>{{ student[0] }}</td>
+      <td>{{ student[1] }}</td>
+      <td>{{ student[2] }}</td>
+      <td>{{ student[3] }}</td>
+      <td>{{ student[4] }}</td>
+      <td>{{ student[5] }}</td>
+      <td>
+        <form action="{{ url_for('students.edit', original_student_id=student[0]) }}" method="get">
+          <button type="submit" class="edit-item btn btn-outline-warning btn-sm">Edit</button>
+        </form>
+      </td>
+      <td>
+        <form action="{{ url_for('students.delete', delete_student_id=student[0]) }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="delete-item btn btn-outline-danger btn-sm" data-id="{{ student[0] }}">Delete</button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
-<!-- This script is for the add button -->
-<script type="text/javascript" src='{{ url_for("static", filename="javascript/addItemsButton.js") }}'></script>
-
-<!-- This is for the dropdown on the search bar -->
-<script type='text/javascript' src='{{ url_for("static", filename="javascript/dropdownSearch.js") }}'></script>
+<!-- This script is for the function button -->
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/buttons.js") }}'></script>
 {% endblock %}

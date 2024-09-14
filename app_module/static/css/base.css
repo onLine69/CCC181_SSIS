@@ -12,11 +12,33 @@ main {
     margin: 0 auto;
 }
 
+.alert {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.alert .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.75rem 1.25rem;
+    margin: -0.75rem -1.25rem -0.75rem auto;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
 .navbar-brand {
     background-color: rgb(68, 68, 248);
     border-radius: 15px;
     color: aliceblue;
     padding: 5px 10px;
+}
+
+#index-main {
+    width: 50%;
 }
 
 .navbar #navbarNav .nav-link{
@@ -28,12 +50,17 @@ main {
     color: aqua;
 }
 
+
 .operation-area{
-    width: 65%;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+}
+
+.operation-area .d-flex{
+    width: 60%;
 }
 
 .operation-area #param-search{
@@ -79,13 +106,4 @@ main {
 
 .table td {
     font-size: 14px;
-}
-
-.table .edit-student {
-    background-color: rgb(211, 204, 204);
-}
-
-.table .delete-student {
-    background-color: red;
-    color: wheat;
 }

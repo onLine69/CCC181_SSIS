@@ -1,32 +1,83 @@
 {% extends "base.html" %}
-{% block title %}Add Student Page{% endblock %}
+
+{% block title %}
+{{ page_name }}
+{% endblock %}
 
 {% block search %}
-<h1>Student Add</h1>
+<h1>{{ page_name }}</h1>
 {% endblock %}
+
 {% block content %}
-<form action="#" method="post">
-    {{ form.csrf_token }}
-    <p >
-        {{form.id_number.label}} : {{form.id_number}}
-    </p>
-    <p>
-        {{form.first_name.label}} : {{form.first_name}}
-    </p>
-    <p>
-        {{form.last_name.label}} : {{form.last_name}}
-    </p>
-    <p>
-        {{form.program_code.label}} : {{form.program_code}}
-    </p>
-    <p>
-        {{form.year_level.label}} : {{form.year_level}}
-    </p>
-    <p>
-        {{form.gender.label}} : {{form.gender}}
-    </p>
-    <p>
-        {{form.add_student()}}
-    </p>
-</form>
+<div class="container mt-4">
+    <!-- Form action URL is determined by whether we are adding or editing a student -->
+    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post">
+        {{ form.csrf_token() }}
+
+        <!-- Hidden input for the original student ID (for editing) -->
+        {% if original_student_id %}
+            <input type="hidden" id="original-student-id" name="original-student-id" value="{{ original_student_id }}">
+        {% endif %}
+
+        <!-- Form group for ID Number -->
+        <div class="mb-3">
+            {{ form.id_number.label(class="form-label") }}
+            {{ form.id_number(class="form-control {% if form.id_number.errors %}is-invalid{% endif %}") }}
+            {% if form.id_number.errors %}
+                <div class="form-text text-danger">{% for error in form.id_number.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for First Name -->
+        <div class="mb-3">
+            {{ form.first_name.label(class="form-label") }}
+            {{ form.first_name(class="form-control {% if form.first_name.errors %}is-invalid{% endif %}") }}
+            {% if form.first_name.errors %}
+                <div class="form-text text-danger">{% for error in form.first_name.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for Last Name -->
+        <div class="mb-3">
+            {{ form.last_name.label(class="form-label") }}
+            {{ form.last_name(class="form-control {% if form.last_name.errors %}is-invalid{% endif %}") }}
+            {% if form.last_name.errors %}
+                <div class="form-text text-danger">{% for error in form.last_name.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for Program Code -->
+        <div class="mb-3">
+            {{ form.program_code.label(class="form-label") }}
+            {{ form.program_code(class="form-select {% if form.program_code.errors %}is-invalid{% endif %}") }}
+            {% if form.program_code.errors %}
+                <div class="form-text text-danger">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for Year Level -->
+        <div class="mb-3">
+            {{ form.year_level.label(class="form-label") }}
+            {{ form.year_level(class="form-control {% if form.year_level.errors %}is-invalid{% endif %}") }}
+            {% if form.year_level.errors %}
+                <div class="form-text text-danger">{% for error in form.year_level.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for Gender -->
+        <div class="mb-3">
+            {{ form.gender.label(class="form-label") }}
+            {{ form.gender(class="form-select {% if form.gender.errors %}is-invalid{% endif %}") }}
+            {% if form.gender.errors %}
+                <div class="form-text text-danger">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Submit button -->
+        <div class="mb-3">
+            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add Student' if not original_student_id else 'Update Student' }}</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmEdit.js") }}'></script>
 {% endblock %}

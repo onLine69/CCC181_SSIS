@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
+<div class="position-absolute top-50 start-50 translate-middle" id="index-main">
+  <div class="position-absolute top-50 start-50 translate-middle">
     <h1>This is the Home Page</h1>
-      {% endblock %}
+    <hr>
+    <h6 >Created by: Caine Ivan R. Bautista <br>(2022-0378)</h6>
+    <form id="start" action="{{url_for('students.index')}}" method="get">
+      <button type="submit" class="btn btn-info">Start ->></button>
+    </form>
+  </div>
+</div>
+{% endblock %}
