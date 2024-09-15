@@ -14,9 +14,9 @@
       <option class="columns-options" value="gender" {% if column_name == 'gender' %}selected{% endif %}>Gender</option>
     </select>
     <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
   </form>
-  <form action="{{ url_for('students.add') }}" method="get">
+  <form action="{{ url_for('students.add') }}" method="get" class="add-form">
     <button type="submit" id="add-item" class="btn btn-success">Add Student</button>
   </form>
 </div>
@@ -43,7 +43,7 @@
       <td>{{ student[0] }}</td>
       <td>{{ student[1] }}</td>
       <td>{{ student[2] }}</td>
-      <td>{{ student[3] }}</td>
+      <td>{{ student[3] if student[3] else 'Unenrolled'}}</td>
       <td>{{ student[4] }}</td>
       <td>{{ student[5] }}</td>
       <td>
@@ -63,5 +63,5 @@
 </table>
 
 <!-- This script is for the function button -->
-<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/buttons.js") }}'></script>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmDelete.js") }}'></script>
 {% endblock %}

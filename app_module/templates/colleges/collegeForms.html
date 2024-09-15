@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_name }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="form-title text-center mb-4">
+        <h1 class="display-4">{{ page_name }}</h1>
+    </div>
+
+    <!-- Form action URL is determined by whether we are adding or editing a student -->
+    <form
+        action="{{ url_for('colleges.edit', original_college_code=original_college_code) if original_college_code else url_for('colleges.add') }}"
+        method="post">
+        {{ form.csrf_token() }}
+
+        <!-- Hidden input for the original student ID (for editing) -->
+        {% if original_program_code %}
+        <input type="hidden" id="original-college-code" name="original-college-code" value="{{ original_college_code }}">
+        {% endif %}
+
+        <!-- Form group for College Code -->
+        <div class="mb-3">
+            {{ form.college_code.label(class="form-label") }}
+            {{ form.college_code(class="form-control {% if form.college_code.errors %}is-invalid{% endif %}") }}
+            {% if form.college_code.errors %}
+            <div class="form-text text-danger">{% for error in form.college_code.errors %} {{ error }} {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for College Name -->
+        <div class="mb-3">
+            {{ form.college_name.label(class="form-label") }}
+            {{ form.college_name(class="form-control {% if form.college_code.errors %}is-invalid{% endif %}") }}
+            {% if form.college_name.errors %}
+            <div class="form-text text-danger">{% for error in form.college_name.errors %} {{ error }} {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Submit button -->
+        <div class="mb-3">
+            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add College' if not original_college_code
+                else 'Update College' }}</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/colleges/confirmForm.js") }}'></script>
+{% endblock %}

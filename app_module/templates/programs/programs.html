@@ -1,25 +1,26 @@
 {% extends "base.html" %}
+
 {% block title %}Programs Page{% endblock %}
-{% block search%}
+
+{% block search %}
 <div class="operation-area">
-  <form class="d-flex" role="search" action="#" method="post">
-    <select name="column-search" id="column-search" class="form-select-lg" data-selected-value="{{column_name}}">
-      <option class="columns-options" value="code" selected>Program Code</option>
-      <option class="columns-options" value="name">Program Name</option>
-      <option class="columns-options" value="college_code">College Code</option>
+  <form class="d-flex" role="search" action="{{ url_for('programs.search') }}" method="get">
+    <select name="column-search" id="column-search" class="form-select-lg">
+      <option class="columns-options" value="code" {% if column_name == 'code' %}selected{% endif %}>Program Code</option>
+      <option class="columns-options" value="name" {% if column_name == 'name' %}selected{% endif %}>Program Name</option>
+      <option class="columns-options" value="college_code" {% if column_name == 'college_code' %}selected{% endif %}>College Code</option>
     </select>
-    <input class="form-control me-2" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}"
-      aria-label="Search">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
+    <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
   </form>
-  <button type="button" class="btn btn-success">Add Program</button>
+  <form action="{{ url_for('programs.add') }}" method="get" class="add-form">
+    <button type="submit" id="add-item" class="btn btn-success">Add Program</button>
+  </form>
 </div>
 {% endblock %}
 
 {% block content %}
-
-<br><br>
-
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -36,10 +37,22 @@
       <td>{{program[0]}}</td>
       <td>{{program[1]}}</td>
       <td>{{program[2]}}</td>
-      <td><button class="edit-student">Edit</button></td>
-      <td><button class="delete-student">Delete</button></td>
+      <td>
+        <form action="{{ url_for('programs.edit', original_program_code=program[0]) }}" method="get">
+          <button type="submit" class="edit-item btn btn-outline-warning btn-sm">Edit</button>
+        </form>
+      </td>
+      <td>
+        <form action="{{ url_for('programs.delete', delete_program_code=program[0]) }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="delete-item btn btn-outline-danger btn-sm" data-id="{{ program[0] }}">Delete</button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<!-- This script is for the function button -->
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/programs/confirmDelete.js") }}'></script>
 {% endblock %}

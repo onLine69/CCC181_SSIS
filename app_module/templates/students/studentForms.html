@@ -4,14 +4,13 @@
 {{ page_name }}
 {% endblock %}
 
-{% block search %}
-<h1>{{ page_name }}</h1>
-{% endblock %}
-
 {% block content %}
 <div class="container mt-4">
+    <div class="form-title text-center mb-4">
+        <h1 class="display-4">{{ page_name }}</h1>
+    </div>
     <!-- Form action URL is determined by whether we are adding or editing a student -->
-    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post">
+    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post" class="needs-validation" novalidate>
         {{ form.csrf_token() }}
 
         <!-- Hidden input for the original student ID (for editing) -->
@@ -20,64 +19,64 @@
         {% endif %}
 
         <!-- Form group for ID Number -->
-        <div class="mb-3">
+        <div class="mb-4">
             {{ form.id_number.label(class="form-label") }}
             {{ form.id_number(class="form-control {% if form.id_number.errors %}is-invalid{% endif %}") }}
             {% if form.id_number.errors %}
-                <div class="form-text text-danger">{% for error in form.id_number.errors %} {{ error }} {% endfor %}</div>
+                <div class="invalid-feedback">{% for error in form.id_number.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for First Name -->
-        <div class="mb-3">
+        <div class="mb-4">
             {{ form.first_name.label(class="form-label") }}
             {{ form.first_name(class="form-control {% if form.first_name.errors %}is-invalid{% endif %}") }}
             {% if form.first_name.errors %}
-                <div class="form-text text-danger">{% for error in form.first_name.errors %} {{ error }} {% endfor %}</div>
+                <div class="invalid-feedback">{% for error in form.first_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for Last Name -->
-        <div class="mb-3">
+        <div class="mb-4">
             {{ form.last_name.label(class="form-label") }}
             {{ form.last_name(class="form-control {% if form.last_name.errors %}is-invalid{% endif %}") }}
             {% if form.last_name.errors %}
-                <div class="form-text text-danger">{% for error in form.last_name.errors %} {{ error }} {% endfor %}</div>
+                <div class="invalid-feedback">{% for error in form.last_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for Program Code -->
-        <div class="mb-3">
+        <div class="mb-4">
             {{ form.program_code.label(class="form-label") }}
             {{ form.program_code(class="form-select {% if form.program_code.errors %}is-invalid{% endif %}") }}
             {% if form.program_code.errors %}
-                <div class="form-text text-danger">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
+                <div class="invalid-feedback">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for Year Level -->
-        <div class="mb-3">
+        <div class="mb-4">
             {{ form.year_level.label(class="form-label") }}
             {{ form.year_level(class="form-control {% if form.year_level.errors %}is-invalid{% endif %}") }}
             {% if form.year_level.errors %}
-                <div class="form-text text-danger">{% for error in form.year_level.errors %} {{ error }} {% endfor %}</div>
+                <div class="invalid-feedback">{% for error in form.year_level.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for Gender -->
-        <div class="mb-3">
+        <div class="mb-4">
             {{ form.gender.label(class="form-label") }}
             {{ form.gender(class="form-select {% if form.gender.errors %}is-invalid{% endif %}") }}
             {% if form.gender.errors %}
-                <div class="form-text text-danger">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
+                <div class="invalid-feedback">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
-
+        
         <!-- Submit button -->
-        <div class="mb-3">
-            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add Student' if not original_student_id else 'Update Student' }}</button>
+        <div class="text-center">
+            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">{{ 'Add Student' if not original_student_id else 'Update Student' }}</button>
         </div>
     </form>
 </div>
-<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmEdit.js") }}'></script>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmForm.js") }}'></script>
 {% endblock %}

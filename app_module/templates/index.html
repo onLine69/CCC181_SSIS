@@ -2,10 +2,10 @@
 {% block title %}Home Page{% endblock %}
 {% block content %}
 <div class="position-absolute top-50 start-50 translate-middle" id="index-main">
-  <div class="position-absolute top-50 start-50 translate-middle">
-    <h1>This is the Home Page</h1>
-    <hr>
-    <h6 >Created by: Caine Ivan R. Bautista <br>(2022-0378)</h6>
+  <img class="position-absolute top-50 start-0 translate-middle" src="https://images.gmanews.tv/webpics/2021/12/Untitled_2021_12_20_17_32_30.jpg" alt="best-duo" width="600" height="400">
+  <div class="position-relative top-50 start-50 translate-left">
+    <h1 style="color: red;">This is the Home Page</h1>
+    <h6 style="color: green;">Created by: Caine Ivan R. Bautista <br>(2022-0378)</h6>
     <form id="start" action="{{url_for('students.index')}}" method="get">
       <button type="submit" class="btn btn-info">Start ->></button>
     </form>

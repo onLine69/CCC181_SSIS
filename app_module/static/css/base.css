@@ -50,25 +50,46 @@ main {
     color: aqua;
 }
 
+/* specific htmls */
 
 .operation-area{
+    position: relative;
     width: 80%;
+    height: fit-content;
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
 }
 
 .operation-area .d-flex{
+    position: absolute;
     width: 60%;
+    height: fit-content;
+    margin: 0 auto;
+    left: 15%;
 }
 
 .operation-area #param-search{
-    width: 50%;
+    display: inline-flex;
+    width: 65%;
     margin: 0 10px;
 }
 
-.btn{
+.operation-area .add-form{
+    position: absolute;
+    width: 40%;
+    left: 75%;
+    margin: 0 10px;
+}
+
+.operation-area .add-form #add-item{
+    display: inline-flex;
+    margin: auto;
+}
+
+.search-btn{
     margin: 0 10px;
 }
 
@@ -106,4 +127,34 @@ main {
 
 .table td {
     font-size: 14px;
+}
+
+
+/* Custom styles for form title */
+.form-title h1 {
+    font-weight: bold;
+    color: #333;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom styles for form fields */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+}
+
+/* Custom styles for invalid feedback */
+.invalid-feedback {
+    font-size: 0.875rem;
+    display: block;
+}
+
+#scrollToTopBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: none;
 }

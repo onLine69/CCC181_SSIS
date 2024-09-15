@@ -2,16 +2,17 @@
 {% block title %}Programs Page{% endblock %}
 {% block search%}
 <div class="operation-area">
-  <form class="d-flex" role="search" action="#" method="post">
-    <select name="column-search" id="column-search" class="form-select-lg" data-selected-value="{{column_name}}">
-      <option class="columns-options" value="code" selected>College Code</option>
-      <option class="columns-options" value="name">College Name</option>
+  <form class="d-flex" role="search" action="{{ url_for('colleges.search') }}" method="get">
+    <select name="column-search" id="column-search" class="form-select-lg">
+      <option class="columns-options" value="code" {% if column_name == 'code' %}selected{% endif %}>College Code</option>
+      <option class="columns-options" value="name" {% if column_name == 'name' %}selected{% endif %}>College Name</option>]
     </select>
-    <input class="form-control me-2" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}"
-      aria-label="Search">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
+    <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
   </form>
-  <button type="button" class="btn btn-success">Add College</button>
+  <form action="{{ url_for('colleges.add') }}" method="get" class="add-form">
+    <button type="submit" id="add-item" class="btn btn-success">Add College</button>
+  </form>
 </div>
 {% endblock %}
 
@@ -32,10 +33,22 @@
     <tr>
       <td>{{college[0]}}</td>
       <td>{{college[1]}}</td>
-      <td><button class="edit-student">Edit</button></td>
-      <td><button class="delete-student">Delete</button></td>
+      <td>
+        <form action="{{ url_for('colleges.edit', original_college_code=college[0]) }}" method="get">
+          <button type="submit" class="edit-item btn btn-outline-warning btn-sm">Edit</button>
+        </form>
+      </td>
+      <td>
+        <form action="{{ url_for('colleges.delete', delete_college_code=college[0]) }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="delete-item btn btn-outline-danger btn-sm" data-id="{{ college[0] }}">Delete</button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<!-- This script is for the function button -->
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/colleges/confirmDelete.js") }}'></script>
 {% endblock %}

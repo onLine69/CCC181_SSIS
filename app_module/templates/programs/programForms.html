@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_name }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="form-title text-center mb-4">
+        <h1 class="display-4">{{ page_name }}</h1>
+    </div>
+
+    <!-- Form action URL is determined by whether we are adding or editing a student -->
+    <form action="{{ url_for('programs.edit', original_program_code=original_program_code) if original_program_code else url_for('programs.add') }}" method="post">
+        {{ form.csrf_token() }}
+
+        <!-- Hidden input for the original student ID (for editing) -->
+        {% if original_program_code %}
+            <input type="hidden" id="original-program-code" name="original-program-code" value="{{ original_program_code }}">
+        {% endif %}
+
+        <!-- Form group for Program Code -->
+        <div class="mb-3">
+            {{ form.program_code.label(class="form-label") }}
+            {{ form.program_code(class="form-control {% if form.program_code.errors %}is-invalid{% endif %}") }}
+            {% if form.program_code.errors %}
+                <div class="form-text text-danger">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for Program Name -->
+        <div class="mb-3">
+            {{ form.program_name.label(class="form-label") }}
+            {{ form.program_name(class="form-control {% if form.program_name.errors %}is-invalid{% endif %}") }}
+            {% if form.program_name.errors %}
+                <div class="form-text text-danger">{% for error in form.program_name.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Form group for Program Code -->
+        <div class="mb-3">
+            {{ form.college_code.label(class="form-label") }}
+            {{ form.college_code(class="form-select {% if form.college_code.errors %}is-invalid{% endif %}") }}
+            {% if form.college_code.errors %}
+                <div class="form-text text-danger">{% for error in form.college_code.errors %} {{ error }} {% endfor %}</div>
+            {% endif %}
+        </div>
+
+        <!-- Submit button -->
+        <div class="mb-3">
+            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add Program' if not original_program_code else 'Update Program' }}</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/programs/confirmForm.js") }}'></script>
+{% endblock %}
