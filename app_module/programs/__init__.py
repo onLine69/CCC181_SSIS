@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-programs_bp = Blueprint('programs',__name__, template_folder='app_module/templates/programs')
+programs_bp = Blueprint('programs',__name__)
 
 from . import routes, controller, forms

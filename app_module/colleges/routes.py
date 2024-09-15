@@ -70,6 +70,7 @@ def edit(original_college_code):
                 flash(f"Invalid url? Or maybe no \"{original_college_code}\" code available. Please don't roam around.", "danger")
         except mysql.connection.Error as e:
             flash(f"Database error: {str(e)}", "danger")
+
         return redirect(url_for('colleges.index'))
     
     if request.method == "POST":
@@ -79,6 +80,7 @@ def edit(original_college_code):
             try:
                 isSame = True   #if nothing has changed
                 updated_college = (form.college_code.data, form.college_name.data, original_college_code)
+                # check if all values are the same
                 for data in range(0, len(original_college)):
                     if original_college[data] != updated_college[data]:
                         isSame = False
@@ -108,7 +110,8 @@ def delete(delete_college_code):
         except mysql.connection.Error as e:
             flash(f"Database error: {str(e)}", "danger")
         return redirect(url_for('colleges.index'))
+    else:
+        #prevent direct deletion using urls
+        flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_college_code}\" code available. Please don't roam around.", "danger")
     
-    #prevent direct deletion using urls
-    flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_college_code}\" code available. Please don't roam around.", "danger")
     return redirect(url_for('colleges.index'))

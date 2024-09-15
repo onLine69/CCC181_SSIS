@@ -86,6 +86,7 @@ def edit(original_program_code):
             try:
                 isSame = True   #if nothing has changed
                 updated_program = (form.program_code.data, form.program_name.data, form.college_code.data, original_program_code)
+                # check if all values are the same
                 for data in range(0, len(original_program)):
                     if original_program[data] != updated_program[data]:
                         isSame = False
@@ -114,8 +115,8 @@ def delete(delete_program_code):
             flash(f"Program \"{delete_program_code}\" deleted successfully!", "success")
         except mysql.connection.Error as e:
             flash(f"Database error: {str(e)}", "danger")
-        return redirect(url_for('programs.index'))
+    else:
+        #prevent direct deletion using urls
+        flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_program_code}\" code available. Please don't roam around.", "danger")
     
-    #prevent direct deletion using urls
-    flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_program_code}\" code available. Please don't roam around.", "danger")
     return redirect(url_for('programs.index'))
