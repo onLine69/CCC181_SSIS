@@ -80,7 +80,7 @@ def edit(original_student_id):
                 form.program_code.data = original_student[3] if original_student[3] else None
                 form.year_level.data = original_student[4]
                 form.gender.data = original_student[5]
-                return render_template('students/studentForms.html', form=form, original_student_id=original_student_id, page_name=f"Edit Student {original_student}")
+                return render_template('students/studentForms.html', form=form, original_student_id=original_student_id, page_name="Edit Student")
             else:
                 #prevent the rendering of the form if the student id is invalid
                 flash(f"Invalid url? Or maybe no \"{original_student_id}\" ID available. Please don't roam around.", "danger")
