@@ -40,10 +40,10 @@ def get(original_college_code):
 def add(college):
     try:
         cur = mysql.connection.cursor()
-        insert_statement = ("""
-                            INSERT INTO `colleges`(`code`, `name`)
-                            VALUES (%s, %s);
-                            """)
+        insert_statement = """
+                        INSERT INTO `colleges`(`code`, `name`)
+                        VALUES (%s, %s);
+                        """
         cur.execute(insert_statement, college)
         mysql.connection.commit()
     except mysql.connection.Error as e:
@@ -56,11 +56,11 @@ def add(college):
 def edit(college):
     try:
         cur = mysql.connection.cursor()
-        edit_statement = ("""
-                          UPDATE `colleges` 
-                          SET `code` = %s, `name` = %s
-                          WHERE `code` = %s;
-                          """)
+        edit_statement = """
+                    UPDATE `colleges` 
+                    SET `code` = %s, `name` = %s
+                    WHERE `code` = %s;
+                    """
         cur.execute(edit_statement, college)
         mysql.connection.commit()
     except mysql.connection.Error as e:
@@ -73,7 +73,10 @@ def edit(college):
 def delete(college_code):
     try:
         cur = mysql.connection.cursor()
-        delete_statement = ("DELETE FROM `colleges` WHERE `code` = %s;")
+        delete_statement = """
+                        DELETE FROM `colleges` 
+                        WHERE `code` = %s;
+                        """
         cur.execute(delete_statement, tuple(college_code))
         mysql.connection.commit()
     except mysql.connection.Error as e:

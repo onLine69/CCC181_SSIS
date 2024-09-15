@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}
-{{ page_name }}
-{% endblock %}
+{% block title %}{{ page_name }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="form-title text-center mb-4">
         <h1 class="display-4">{{ page_name }}</h1>
     </div>
+
     <!-- Form action URL is determined by whether we are adding or editing a student -->
-    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post" class="needs-validation" novalidate>
+    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post" class="needs-validation">
         {{ form.csrf_token() }}
 
         <!-- Hidden input for the original student ID (for editing) -->
@@ -21,7 +20,7 @@
         <!-- Form group for ID Number -->
         <div class="mb-4">
             {{ form.id_number.label(class="form-label") }}
-            {{ form.id_number(class="form-control {% if form.id_number.errors %}is-invalid{% endif %}") }}
+            {{ form.id_number(class="form-control {% if form.id_number.errors %}is-invalid{% endif %}", placeholder="e.g. 2022-3337") }}
             {% if form.id_number.errors %}
                 <div class="invalid-feedback">{% for error in form.id_number.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -30,7 +29,7 @@
         <!-- Form group for First Name -->
         <div class="mb-4">
             {{ form.first_name.label(class="form-label") }}
-            {{ form.first_name(class="form-control {% if form.first_name.errors %}is-invalid{% endif %}") }}
+            {{ form.first_name(class="form-control {% if form.first_name.errors %}is-invalid{% endif %}", placeholder="e.g. Kup") }}
             {% if form.first_name.errors %}
                 <div class="invalid-feedback">{% for error in form.first_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -39,7 +38,7 @@
         <!-- Form group for Last Name -->
         <div class="mb-4">
             {{ form.last_name.label(class="form-label") }}
-            {{ form.last_name(class="form-control {% if form.last_name.errors %}is-invalid{% endif %}") }}
+            {{ form.last_name(class="form-control {% if form.last_name.errors %}is-invalid{% endif %}", placeholder="e.g. Al") }}
             {% if form.last_name.errors %}
                 <div class="invalid-feedback">{% for error in form.last_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -57,7 +56,7 @@
         <!-- Form group for Year Level -->
         <div class="mb-4">
             {{ form.year_level.label(class="form-label") }}
-            {{ form.year_level(class="form-control {% if form.year_level.errors %}is-invalid{% endif %}") }}
+            {{ form.year_level(class="form-select {% if form.year_level.errors %}is-invalid{% endif %}") }}
             {% if form.year_level.errors %}
                 <div class="invalid-feedback">{% for error in form.year_level.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -66,7 +65,7 @@
         <!-- Form group for Gender -->
         <div class="mb-4">
             {{ form.gender.label(class="form-label") }}
-            {{ form.gender(class="form-select {% if form.gender.errors %}is-invalid{% endif %}") }}
+            {{ form.gender(class="form-control {% if form.gender.errors %}is-invalid{% endif %}", placeholder="e.g. ALUGBATI") }}
             {% if form.gender.errors %}
                 <div class="invalid-feedback">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -78,5 +77,6 @@
         </div>
     </form>
 </div>
+
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmForm.js") }}'></script>
 {% endblock %}

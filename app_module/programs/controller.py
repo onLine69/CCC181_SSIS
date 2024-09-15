@@ -40,10 +40,10 @@ def get(original_program_code):
 def add(program):
     try:
         cur = mysql.connection.cursor()
-        insert_statement = ("""
-                            INSERT INTO `programs`(`code`, `name`, `college_code`)
-                            VALUES (%s, %s, %s);
-                            """)
+        insert_statement = """
+                        INSERT INTO `programs`(`code`, `name`, `college_code`)
+                        VALUES (%s, %s, %s);
+                        """
         cur.execute(insert_statement, program)
         mysql.connection.commit()
     except mysql.connection.Error as e:
@@ -56,11 +56,11 @@ def add(program):
 def edit(program):
     try:
         cur = mysql.connection.cursor()
-        edit_statement = ("""
-                          UPDATE `programs` 
-                          SET `code` = %s, `name` = %s, `college_code` = %s 
-                          WHERE `code` = %s;
-                          """)
+        edit_statement = """
+                        UPDATE `programs` 
+                        SET `code` = %s, `name` = %s, `college_code` = %s 
+                        WHERE `code` = %s;
+                        """
         cur.execute(edit_statement, program)
         mysql.connection.commit()
     except mysql.connection.Error as e:
@@ -73,8 +73,11 @@ def edit(program):
 def delete(program_code):
     try:
         cur = mysql.connection.cursor()
-        delete_statement = "DELETE FROM `programs` WHERE `code` = %s;"
-        cur.execute(delete_statement, (program_code))
+        delete_statement = """
+                        DELETE FROM `programs` 
+                        WHERE `code` = %s;
+                        """
+        cur.execute(delete_statement, tuple(program_code))
         mysql.connection.commit()
         cur.close()
     except mysql.connection.Error as e:

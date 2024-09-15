@@ -3,8 +3,5 @@ from dotenv import load_dotenv
 
 load_dotenv('.env')
 
+# Start the app
 app = start_app()
-app.debug = True
-
-#if __name__ == '__main__':
-#	start_app()

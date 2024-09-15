@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-{{ page_name }}
-{% endblock %}
+{% block title %}{{ page_name }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -14,7 +12,7 @@
     <form action="{{ url_for('programs.edit', original_program_code=original_program_code) if original_program_code else url_for('programs.add') }}" method="post">
         {{ form.csrf_token() }}
 
-        <!-- Hidden input for the original student ID (for editing) -->
+        <!-- Hidden input for the original program code (for editing) -->
         {% if original_program_code %}
             <input type="hidden" id="original-program-code" name="original-program-code" value="{{ original_program_code }}">
         {% endif %}
@@ -22,7 +20,7 @@
         <!-- Form group for Program Code -->
         <div class="mb-3">
             {{ form.program_code.label(class="form-label") }}
-            {{ form.program_code(class="form-control {% if form.program_code.errors %}is-invalid{% endif %}") }}
+            {{ form.program_code(class="form-control {% if form.program_code.errors %}is-invalid{% endif %}", placeholder="e.g. BSCS") }}
             {% if form.program_code.errors %}
                 <div class="form-text text-danger">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -31,7 +29,7 @@
         <!-- Form group for Program Name -->
         <div class="mb-3">
             {{ form.program_name.label(class="form-label") }}
-            {{ form.program_name(class="form-control {% if form.program_name.errors %}is-invalid{% endif %}") }}
+            {{ form.program_name(class="form-control {% if form.program_name.errors %}is-invalid{% endif %}", placeholder="e.g. Bachelor of Science in Computer Science") }}
             {% if form.program_name.errors %}
                 <div class="form-text text-danger">{% for error in form.program_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -52,5 +50,6 @@
         </div>
     </form>
 </div>
+
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/programs/confirmForm.js") }}'></script>
 {% endblock %}

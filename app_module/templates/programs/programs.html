@@ -4,18 +4,20 @@
 
 {% block search %}
 <div class="operation-area">
-  <form class="d-flex" role="search" action="{{ url_for('programs.search') }}" method="get">
-    <select name="column-search" id="column-search" class="form-select-lg">
-      <option class="columns-options" value="code" {% if column_name == 'code' %}selected{% endif %}>Program Code</option>
-      <option class="columns-options" value="name" {% if column_name == 'name' %}selected{% endif %}>Program Name</option>
-      <option class="columns-options" value="college_code" {% if column_name == 'college_code' %}selected{% endif %}>College Code</option>
-    </select>
-    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
-    <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
-  </form>
-  <form action="{{ url_for('programs.add') }}" method="get" class="add-form">
-    <button type="submit" id="add-item" class="btn btn-success">Add Program</button>
-  </form>
+  <div class="operations">
+    <form class="d-flex" role="search" action="{{ url_for('programs.search') }}" method="get">
+      <select name="column-search" id="column-search" class="form-select-lg">
+        <option class="columns-options" value="code" {% if column_name == 'code' %}selected{% endif %}>Program Code</option>
+        <option class="columns-options" value="name" {% if column_name == 'name' %}selected{% endif %}>Program Name</option>
+        <option class="columns-options" value="college_code" {% if column_name == 'college_code' %}selected{% endif %}>College Code</option>
+      </select>
+      <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
+      <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
+    </form>
+    <form action="{{ url_for('programs.add') }}" method="get" class="add-form">
+      <button type="submit" id="add-item" class="btn btn-success">Add Program</button>
+    </form>
+  </div>
 </div>
 {% endblock %}
 
@@ -34,9 +36,9 @@
   <tbody>
     {% for program in programs %}
     <tr>
-      <td>{{program[0]}}</td>
-      <td>{{program[1]}}</td>
-      <td>{{program[2]}}</td>
+      <td>{{ program[0] }}</td>
+      <td>{{ program[1] }}</td>
+      <td>{{ program[2] }}</td>
       <td>
         <form action="{{ url_for('programs.edit', original_program_code=program[0]) }}" method="get">
           <button type="submit" class="edit-item btn btn-outline-warning btn-sm">Edit</button>
