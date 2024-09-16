@@ -16,7 +16,7 @@ def displayAll():
 def search(column, param):
     try:
         cur = mysql.connection.cursor()
-        cur.execute(f"SELECT * FROM `students` WHERE {column} LIKE '%{param}%';")
+        cur.execute(f"SELECT * FROM `students` WHERE {column} COLLATE utf8mb4_bin LIKE '%{param}%';")
         return cur.fetchall()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
@@ -78,7 +78,7 @@ def delete(student_id):
                         DELETE FROM `students` 
                         WHERE `student_id` = %s;
                         """
-        cur.execute(delete_statement, tuple(student_id))
+        cur.execute(delete_statement, (student_id,))
         mysql.connection.commit()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
