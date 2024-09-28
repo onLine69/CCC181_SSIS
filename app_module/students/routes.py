@@ -5,6 +5,7 @@ from . import students_bp
 from app_module.students.forms import StudentForm
 from app_module import mysql
 
+
 @students_bp.route('/', methods=["GET"])
 def index():    # The main display of the students
     try:
@@ -48,7 +49,7 @@ def add():
                 form.year_level.data,
                 form.gender.data
             )
-            
+
             try:
                 # Add the student to the database
                 addStudent(student)
@@ -62,10 +63,10 @@ def add():
     return render_template('students/studentForms.html', form=form, page_name="Add Student")
 
 
-
 @students_bp.route('/edit/<original_student_id>', methods=["POST", "GET"])
 def edit(original_student_id):
     original_student = get(original_student_id) #fetch the student
+
     if request.method == "GET":
         try:
             #if the student exist in the database, just to prevent random id numbers from the url to enter the forms
@@ -76,7 +77,7 @@ def edit(original_student_id):
                 form.id_number.data = original_student[0]
                 form.first_name.data = original_student[1]
                 form.last_name.data = original_student[2]
-                form.program_code.data = original_student[3] if original_student[3] else None,
+                form.program_code.data = original_student[3] if original_student[3] else None
                 form.year_level.data = original_student[4]
                 form.gender.data = original_student[5]
                 return render_template('students/studentForms.html', form=form, original_student_id=original_student_id, page_name="Edit Student")
@@ -104,12 +105,13 @@ def edit(original_student_id):
                     form.gender.data, 
                     original_student_id
                 )
+                # check if all values are the same
                 for data in range(0, len(original_student)):
                     if original_student[data] != updated_student[data]:
                         isSame = False
                         break
 
-                if (not isSame):
+                if (not isSame):    #only update when something changed
                     editStudent(updated_student)
                     flash(f"Student with now ID {updated_student[0]} updated successfully!", "success")
                 else:
@@ -132,8 +134,8 @@ def delete(delete_student_id):
             flash(f"Student \"{delete_student_id}\" deleted successfully!", "success")
         except mysql.connection.Error as e:
             flash(f"Database error: {str(e)}", "danger")
-        return redirect(url_for('students.index'))
+    else:
+        #prevent direct deletion using urls
+        flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_student_id}\" ID available. Please don't roam around.", "danger")
     
-    #prevent direct deletion using urls
-    flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_student_id}\" ID available. Please don't roam around.", "danger")
     return redirect(url_for('students.index'))

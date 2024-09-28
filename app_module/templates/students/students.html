@@ -4,21 +4,23 @@
 
 {% block search %}
 <div class="operation-area">
-  <form class="d-flex" role="search" action="{{ url_for('students.search') }}" method="get">
-    <select name="column-search" id="column-search" class="form-select-lg">
-      <option class="columns-options" value="student_id" {% if column_name == 'student_id' %}selected{% endif %}>ID Number</option>
-      <option class="columns-options" value="first_name" {% if column_name == 'first_name' %}selected{% endif %}>First Name</option>
-      <option class="columns-options" value="last_name" {% if column_name == 'last_name' %}selected{% endif %}>Last Name</option>
-      <option class="columns-options" value="program_code" {% if column_name == 'program_code' %}selected{% endif %}>Program</option>
-      <option class="columns-options" value="year_level" {% if column_name == 'year_level' %}selected{% endif %}>Year Level</option>
-      <option class="columns-options" value="gender" {% if column_name == 'gender' %}selected{% endif %}>Gender</option>
-    </select>
-    <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
-    <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
-  </form>
-  <form action="{{ url_for('students.add') }}" method="get" class="add-form">
-    <button type="submit" id="add-item" class="btn btn-success">Add Student</button>
-  </form>
+  <div class="operations">
+    <form class="d-flex" role="search" action="{{ url_for('students.search') }}" method="get">
+      <select name="column-search" id="column-search" class="form-select-lg">
+        <option class="columns-options" value="student_id" {% if column_name == 'student_id' %}selected{% endif %}>ID Number</option>
+        <option class="columns-options" value="first_name" {% if column_name == 'first_name' %}selected{% endif %}>First Name</option>
+        <option class="columns-options" value="last_name" {% if column_name == 'last_name' %}selected{% endif %}>Last Name</option>
+        <option class="columns-options" value="program_code" {% if column_name == 'program_code' %}selected{% endif %}>Program</option>
+        <option class="columns-options" value="year_level" {% if column_name == 'year_level' %}selected{% endif %}>Year Level</option>
+        <option class="columns-options" value="gender" {% if column_name == 'gender' %}selected{% endif %}>Gender</option>
+      </select>
+      <input class="form-control me-2" id="param-search" type="search" name="param-search" placeholder="Search" value="{{ searched_item }}" aria-label="Search">
+      <button class="search-btn btn btn-outline-secondary" type="submit">Search</button>
+    </form>
+    <form action="{{ url_for('students.add') }}" method="get" class="add-form">
+      <button type="submit" id="add-item" class="btn btn-success">Add Student</button>
+    </form>
+  </div>
 </div>
 {% endblock %}
 
@@ -43,7 +45,7 @@
       <td>{{ student[0] }}</td>
       <td>{{ student[1] }}</td>
       <td>{{ student[2] }}</td>
-      <td>{{ student[3] if student[3] else 'Unenrolled'}}</td>
+      <td>{{ student[3] if student[3] else 'Unenrolled' }}</td>
       <td>{{ student[4] }}</td>
       <td>{{ student[5] }}</td>
       <td>

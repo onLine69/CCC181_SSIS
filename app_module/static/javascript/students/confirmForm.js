@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = this.closest('form');
         const originalStudentId = form.querySelector('#original-student-id') ? form.querySelector('#original-student-id').value : null;
         const studentId = form.querySelector('input[name="id_number"]').value;
-
+        
+        console.log("abot");
         if (originalStudentId === null) {
             swal("Processing adding student!", `Student with ID \"${studentId}\" will be added to the database if valid.`, "info").then(() => {
                 form.submit();

@@ -16,7 +16,7 @@ def displayAll():
 def search(column, param):
     try:
         cur = mysql.connection.cursor()
-        cur.execute(f"SELECT * FROM `students` WHERE {column} LIKE '%{param}%';")
+        cur.execute(f"SELECT * FROM `students` WHERE {column} COLLATE utf8mb4_bin LIKE '%{param}%';")
         return cur.fetchall()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
@@ -40,17 +40,13 @@ def get(original_student_id):
 def add(student):
     try:
         cur = mysql.connection.cursor()
-        
         # Prepare the insert statement
         insert_statement = """
-            INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `program_code`, `year_level`, `gender`)
-            VALUES (%s, %s, %s, %s, %s, %s);
-        """
-        
-        # Execute the statement with the student tuple
+                        INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `program_code`, `year_level`, `gender`)
+                        VALUES (%s, %s, %s, %s, %s, %s);
+                        """
         cur.execute(insert_statement, student)
         mysql.connection.commit()
-        
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
         raise e
@@ -61,11 +57,11 @@ def add(student):
 def edit(student):
     try:
         cur = mysql.connection.cursor()
-        edit_statement = ("""
-                          UPDATE `students` 
-                          SET `student_id` = %s, `first_name` = %s, `last_name` = %s, `program_code` = %s, `year_level` = %s, `gender` = %s 
-                          WHERE `student_id` = %s;
-                          """)
+        edit_statement = """
+                        UPDATE `students` 
+                        SET `student_id` = %s, `first_name` = %s, `last_name` = %s, `program_code` = %s, `year_level` = %s, `gender` = %s 
+                        WHERE `student_id` = %s;
+                        """
         cur.execute(edit_statement, student)
         mysql.connection.commit()
     except mysql.connection.Error as e:
@@ -78,10 +74,12 @@ def edit(student):
 def delete(student_id):
     try:
         cur = mysql.connection.cursor()
-        delete_statement = "DELETE FROM `students` WHERE `student_id` = %s;"
+        delete_statement = """
+                        DELETE FROM `students` 
+                        WHERE `student_id` = %s;
+                        """
         cur.execute(delete_statement, (student_id,))
         mysql.connection.commit()
-        cur.close()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
         raise e

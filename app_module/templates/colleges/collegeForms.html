@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-{{ page_name }}
-{% endblock %}
+{% block title %}{{ page_name }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -24,7 +22,7 @@
         <!-- Form group for College Code -->
         <div class="mb-3">
             {{ form.college_code.label(class="form-label") }}
-            {{ form.college_code(class="form-control {% if form.college_code.errors %}is-invalid{% endif %}") }}
+            {{ form.college_code(class="form-control {% if form.college_code.errors %}is-invalid{% endif %}", placeholder="e.g. CCS") }}
             {% if form.college_code.errors %}
             <div class="form-text text-danger">{% for error in form.college_code.errors %} {{ error }} {% endfor %}
             </div>
@@ -34,7 +32,7 @@
         <!-- Form group for College Name -->
         <div class="mb-3">
             {{ form.college_name.label(class="form-label") }}
-            {{ form.college_name(class="form-control {% if form.college_code.errors %}is-invalid{% endif %}") }}
+            {{ form.college_name(class="form-control {% if form.college_code.errors %}is-invalid{% endif %}", placeholder="e.g. College of Computer Studies") }}
             {% if form.college_name.errors %}
             <div class="form-text text-danger">{% for error in form.college_name.errors %} {{ error }} {% endfor %}
             </div>
@@ -43,10 +41,10 @@
 
         <!-- Submit button -->
         <div class="mb-3">
-            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add College' if not original_college_code
-                else 'Update College' }}</button>
+            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add College' if not original_college_code else 'Update College' }}</button>
         </div>
     </form>
 </div>
+
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/colleges/confirmForm.js") }}'></script>
 {% endblock %}
