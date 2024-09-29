@@ -1,5 +1,5 @@
 from flask import flash, render_template, request, redirect, url_for
-from app_module.colleges.controller import search as searchCollege, displayAll, add as addCollege, edit as editCollege, get, delete as deleteCollege
+from app_module.colleges.controller import search as searchCollege, displayAll, add as addCollege, edit as editCollege, get, delete as deleteCollege, customErrorMessages
 from . import colleges_bp
 from app_module.colleges.forms import CollegeForm
 from app_module import mysql
@@ -9,7 +9,7 @@ def index():    # The main display of the colleges
     try:
         colleges = displayAll() #fetch every college from the database
     except mysql.connection.Error as e:
-        flash(f"Database error: {str(e)}", "danger")
+        flash(customErrorMessages(e), "danger")
         colleges = []   #if there is an error, display none
     
     return render_template('colleges/colleges.html', colleges=colleges) #render the template with the data
@@ -26,7 +26,7 @@ def search():   # Display the searched college
             colleges = searchCollege(column_name, searched_item)
             return render_template('colleges/colleges.html', colleges=colleges, column_name=column_name, searched_item=searched_item) 
     except mysql.connection.Error as e:
-        flash(f"Database error: {str(e)}", "danger")
+        flash(customErrorMessages(e), "danger")
     
     return redirect(url_for('colleges.index'))  #if the searched parameter is empty or an error occur, redirect to the index
     
@@ -43,10 +43,10 @@ def add():
             try:
                 #add the program to the database, then redirect to the index if successful
                 addCollege(college)
-                flash(f"College \"{college[0]}\" added successfully!", "success")
+                flash(f"College '{college[0]}' added successfully!", "success")
                 return redirect(url_for('colleges.index'))
             except mysql.connection.Error as e:
-                flash(f"Database error: {str(e)}", "danger")
+                flash(customErrorMessages(e), "danger")
         else:
             flash("Form validation error. Please check your input.", "warning")
 
@@ -67,9 +67,9 @@ def edit(original_college_code):
                 return render_template('colleges/collegeForms.html', form=form, original_college_code=original_college_code, page_name="Edit College")
             else:
                 #prevent the rendering of the form if the program id is invalid
-                flash(f"Invalid url? Or maybe no \"{original_college_code}\" code available. Please don't roam around.", "danger")
+                flash(f"Invalid url? Or maybe no '{original_college_code}' code available. Please don't roam around.", "danger")
         except mysql.connection.Error as e:
-            flash(f"Database error: {str(e)}", "danger")
+            flash(customErrorMessages(e), "danger")
 
         return redirect(url_for('colleges.index'))
     
@@ -94,7 +94,7 @@ def edit(original_college_code):
 
                 return redirect(url_for('colleges.index'))
             except mysql.connection.Error as e:
-                flash(f"Database error: {str(e)}", "danger")
+                flash(customErrorMessages(e), "danger")
         else:
             flash("Form validation error. Please check your input.", "warning")
             
@@ -106,12 +106,12 @@ def delete(delete_college_code):
     if request.method == "POST":
         try:
             deleteCollege(delete_college_code)
-            flash(f"College \"{delete_college_code}\" deleted successfully!", "success")
+            flash(f"College '{delete_college_code}' deleted successfully!", "success")
         except mysql.connection.Error as e:
-            flash(f"Database error: {str(e)}", "danger")
+            flash(customErrorMessages(e), "danger")
         return redirect(url_for('colleges.index'))
     else:
         #prevent direct deletion using urls
-        flash(f"Delete Error: Don't just copy paste link (Not pwede), or \"{delete_college_code}\" code available. Please don't roam around.", "danger")
+        flash(f"Delete Error: Don't just copy paste link (Not pwede), or '{delete_college_code}' code available. Please don't roam around.", "danger")
     
     return redirect(url_for('colleges.index'))

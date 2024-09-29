@@ -84,3 +84,10 @@ def delete(college_code):
         raise e
     finally:
         cur.close()  # Ensure the cursor is closed
+
+def customErrorMessages(error):
+    if (error.args[0] == 1062): # Check the error code first
+        value = error.args[1].split("'")[1]
+        return f"College Code or Name '{value}' already exist."
+    
+    return f"Something is wrong, error with code '{error.args[0]}'. \n Description: '{error.args[1]}'."

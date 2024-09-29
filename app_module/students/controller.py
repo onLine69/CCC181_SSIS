@@ -16,7 +16,10 @@ def displayAll():
 def search(column, param):
     try:
         cur = mysql.connection.cursor()
-        cur.execute(f"SELECT * FROM `students` WHERE {column} COLLATE utf8mb4_bin LIKE '%{param}%';")
+        if param == "Unenrolled":
+            cur.execute(f"SELECT * FROM `students` WHERE {column} IS NULL;")
+        else:    
+            cur.execute(f"SELECT * FROM `students` WHERE {column} COLLATE utf8mb4_bin LIKE '%{param}%';")
         return cur.fetchall()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
@@ -85,3 +88,14 @@ def delete(student_id):
         raise e
     finally:
         cur.close()  # Ensure the cursor is closed
+
+def customErrorMessages(error):
+    if (error.args[0] == 1062): # Check the error code first
+        value = error.args[1].split("'")[1]
+        if (value[4] == '-' and len(value) == 9):   # Check if the value is an id number
+            return f"ID number '{value}' already exist."
+        else:
+            full_name = value.split("-")
+            return f"Name '{full_name[0]} {full_name[1]}' already exist."
+    
+    return f"Something is wrong, error with code '{error.args[0]}'. \n Description: '{error.args[1]}'."
