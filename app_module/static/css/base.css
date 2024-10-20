@@ -122,6 +122,14 @@ main {
     vertical-align: middle;
 }
 
+.profile {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;  /* Makes the image circular */
+    object-fit: cover;    /* Ensures the image covers the area without distortion */
+    cursor: pointer;
+}
+
 /* Forms */
 /* Custom styles for form title */
 .form-title h1 {

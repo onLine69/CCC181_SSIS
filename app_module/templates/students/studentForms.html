@@ -9,38 +9,56 @@
     </div>
 
     <!-- Form action URL is determined by whether we are adding or editing a student -->
-    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post" class="needs-validation">
+    <form
+        action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}"
+        method="post" class="needs-validation" enctype="multipart/form-data">
         {{ form.csrf_token() }}
 
         <!-- Hidden input for the original student ID (for editing) -->
         {% if original_student_id %}
-            <input type="hidden" id="original-student-id" name="original-student-id" value="{{ original_student_id }}">
+        <input type="hidden" id="original-student-id" name="original-student-id" value="{{ original_student_id }}">
         {% endif %}
+
+        <div class="mb-4 text-center">
+            <p>Profile Picture</p> <br>
+            <img id="studentImage" src="{{ profile_picture_data }}" alt="{{ form.id_number.data }}"
+                class="img-fluid img-thumbnail" height="200" width="200">
+            <input type="text" name="alt-profile" id="alt-profile" value="{{ profile_picture_data }}">
+            <div class="input-group mt-4">
+                <input type="file" id="profile-picture" name="profile-picture" accept=".jpg, .jpeg, .png" onchange="preview()">
+                <button class="btn btn-secondary" type="button" id="resetButton" onclick="resetPic()">Reset</button>
+                <button class="btn btn-danger" type="button" id="removeButton" onclick="removePic()">Remove</button>
+            </div>
+        </div>
+
 
         <!-- Form group for ID Number -->
         <div class="mb-4">
             {{ form.id_number.label(class="form-label") }}
-            {{ form.id_number(class="form-control {% if form.id_number.errors %}is-invalid{% endif %}", placeholder="e.g. 2022-3337") }}
+            {{ form.id_number(class="form-control {% if form.id_number.errors %}is-invalid{% endif %}",
+            placeholder="e.g. 2022-3337") }}
             {% if form.id_number.errors %}
-                <div class="invalid-feedback">{% for error in form.id_number.errors %} {{ error }} {% endfor %}</div>
+            <div class="invalid-feedback">{% for error in form.id_number.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for First Name -->
         <div class="mb-4">
             {{ form.first_name.label(class="form-label") }}
-            {{ form.first_name(class="form-control {% if form.first_name.errors %}is-invalid{% endif %}", placeholder="e.g. Kup") }}
+            {{ form.first_name(class="form-control {% if form.first_name.errors %}is-invalid{% endif %}",
+            placeholder="e.g. Kup") }}
             {% if form.first_name.errors %}
-                <div class="invalid-feedback">{% for error in form.first_name.errors %} {{ error }} {% endfor %}</div>
+            <div class="invalid-feedback">{% for error in form.first_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for Last Name -->
         <div class="mb-4">
             {{ form.last_name.label(class="form-label") }}
-            {{ form.last_name(class="form-control {% if form.last_name.errors %}is-invalid{% endif %}", placeholder="e.g. Al") }}
+            {{ form.last_name(class="form-control {% if form.last_name.errors %}is-invalid{% endif %}",
+            placeholder="e.g. Al") }}
             {% if form.last_name.errors %}
-                <div class="invalid-feedback">{% for error in form.last_name.errors %} {{ error }} {% endfor %}</div>
+            <div class="invalid-feedback">{% for error in form.last_name.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
@@ -49,7 +67,7 @@
             {{ form.program_code.label(class="form-label") }}
             {{ form.program_code(class="form-select {% if form.program_code.errors %}is-invalid{% endif %}") }}
             {% if form.program_code.errors %}
-                <div class="invalid-feedback">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
+            <div class="invalid-feedback">{% for error in form.program_code.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
@@ -58,25 +76,53 @@
             {{ form.year_level.label(class="form-label") }}
             {{ form.year_level(class="form-select {% if form.year_level.errors %}is-invalid{% endif %}") }}
             {% if form.year_level.errors %}
-                <div class="invalid-feedback">{% for error in form.year_level.errors %} {{ error }} {% endfor %}</div>
+            <div class="invalid-feedback">{% for error in form.year_level.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
 
         <!-- Form group for Gender -->
         <div class="mb-4">
             {{ form.gender.label(class="form-label") }}
-            {{ form.gender(class="form-control {% if form.gender.errors %}is-invalid{% endif %}", placeholder="e.g. ALUGBATI") }}
+            {{ form.gender(class="form-control {% if form.gender.errors %}is-invalid{% endif %}", placeholder="e.g.
+            ALUGBATI") }}
             {% if form.gender.errors %}
-                <div class="invalid-feedback">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
+            <div class="invalid-feedback">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
         </div>
-        
+
         <!-- Submit button -->
         <div class="text-center">
-            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">{{ 'Add Student' if not original_student_id else 'Update Student' }}</button>
+            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">{{ 'Add Student' if not
+                original_student_id else 'Update Student' }}</button>
         </div>
     </form>
 </div>
 
+
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmForm.js") }}'></script>
+<script>
+    const originalImageSrc = "{{ profile_picture_data }}"; // Store the original image source
+
+    function preview() {
+        studentImage.src=URL.createObjectURL(event.target.files[0]);
+        document.getElementById('alt-profile').value = studentImage.src;
+    }
+
+    function resetPic() {
+        // Clear the file input and restore the original image
+        document.getElementById('profile-picture').value = '';
+        document.getElementById('alt-profile').value = originalImageSrc;
+        document.getElementById('studentImage').src = originalImageSrc; // Restore the original image
+    }
+
+    function removePic() {
+        // Restore the default image and clear the file input
+        const defaultImage = "{{ url_for('static', filename='images/icons/default_profile.png') }}";
+        document.getElementById('profile-picture').value = '';
+        document.getElementById('alt-profile').value = defaultImage;
+        document.getElementById('studentImage').src = defaultImage; // Set to default image
+    }
+    
+
+</script>
 {% endblock %}

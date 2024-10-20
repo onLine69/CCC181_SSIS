@@ -1,4 +1,10 @@
+import cloudinary
+from cloudinary.uploader import upload, destroy
+from cloudinary.api import resource
+from flask import url_for
 from app_module import mysql
+from config import CLOUD_NAME
+
 
 # Fetch every student data from the database
 def displayAll():
@@ -45,8 +51,8 @@ def add(student):
         cur = mysql.connection.cursor()
         # Prepare the insert statement
         insert_statement = """
-                        INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `program_code`, `year_level`, `gender`)
-                        VALUES (%s, %s, %s, %s, %s, %s);
+                        INSERT INTO `students` (`profile_version`, `student_id`, `first_name`, `last_name`, `program_code`, `year_level`, `gender`)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s);
                         """
         cur.execute(insert_statement, student)
         mysql.connection.commit()
@@ -62,7 +68,7 @@ def edit(student):
         cur = mysql.connection.cursor()
         edit_statement = """
                         UPDATE `students` 
-                        SET `student_id` = %s, `first_name` = %s, `last_name` = %s, `program_code` = %s, `year_level` = %s, `gender` = %s 
+                        SET `profile_version` = %s, `student_id` = %s, `first_name` = %s, `last_name` = %s, `program_code` = %s, `year_level` = %s, `gender` = %s 
                         WHERE `student_id` = %s;
                         """
         cur.execute(edit_statement, student)
@@ -99,3 +105,22 @@ def customErrorMessages(error):
             return f"Name '{full_name[0]} {full_name[1]}' already exist."
     
     return f"Something is wrong, error with code '{error.args[0]}'. \n Description: '{error.args[1]}'."
+
+def uploadPicture(image_path, student_id):
+    try:
+        upload_result = upload(image_path,
+                               asset_folder="SSIS/Students",
+                               public_id=student_id,
+                               invalidate=True,
+                               overwrite=True,
+                               resource_type="image",
+                               format="png")
+        return upload_result
+    except Exception as e:
+        raise e
+    
+def fetchPicture(profile_version, student_id):
+    return url_for('static', filename='images/icons/default_profile.png') if not profile_version else f"https://res.cloudinary.com/{CLOUD_NAME}/image/upload/v{profile_version}/{student_id}.png"
+
+def destroyPicture(student_id):
+    destroy(student_id)

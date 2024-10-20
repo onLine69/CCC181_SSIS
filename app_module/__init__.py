@@ -1,9 +1,14 @@
 from flask import Flask
 from flask_mysqldb import MySQL
-from config import SECRET_KEY,DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST,BOOTSTRAP_SERVE_LOCAL
+from config import SECRET_KEY,DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST, BOOTSTRAP_SERVE_LOCAL
 from flask_wtf.csrf import CSRFProtect
+import cloudinary
+
+from dotenv import load_dotenv
+load_dotenv('.env')
 
 mysql = MySQL()
+cloudnary_host = cloudinary
 
 from app_module.students import students_bp
 from app_module.programs import programs_bp
@@ -18,9 +23,13 @@ def start_app():
         MYSQL_PASSWORD=DB_PASSWORD,
         MYSQL_DB=DB_NAME,
         MYSQL_HOST=DB_HOST,
-        BOOTSTRAP_SERVE_LOCAL=BOOTSTRAP_SERVE_LOCAL
+        BOOTSTRAP_SERVE_LOCAL=BOOTSTRAP_SERVE_LOCAL,
+        MAX_CONTENT_LENGTH=5*1024*1024
     )
-    
+
+    #congfigure cloudinary
+    cloudnary_host.config(secure=True)
+
     #register the blueprints
     app.register_blueprint(students_bp, url_prefix="/students")
     app.register_blueprint(programs_bp, url_prefix="/programs")

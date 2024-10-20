@@ -29,6 +29,7 @@
 <table class="table table-hover">
   <thead>
     <tr>
+      <th scope="col"></th>
       <th scope="col">ID Number</th>
       <th scope="col">First Name</th>
       <th scope="col">Last Name</th>
@@ -42,27 +43,51 @@
   <tbody>
     {% for student in students %}
     <tr>
-      <td>{{ student[0] }}</td>
+      <td><img src="{{ pics[student[1]] }}" alt="{{ student[1] }}" class="profile img-fluid img-thumbnail"
+        data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setImageSrc(this.src)"></td>
       <td>{{ student[1] }}</td>
       <td>{{ student[2] }}</td>
-      <td>{{ student[3] if student[3] else 'Unenrolled' }}</td>
-      <td>{{ student[4] }}</td>
+      <td>{{ student[3] }}</td>
+      <td>{{ student[4] if student[4] else 'Unenrolled' }}</td>
       <td>{{ student[5] }}</td>
+      <td>{{ student[6] }}</td>
       <td>
-        <form action="{{ url_for('students.edit', original_student_id=student[0]) }}" method="get">
+        <form action="{{ url_for('students.edit', original_student_id=student[1]) }}" method="get">
           <button type="submit" class="edit-item btn btn-outline-warning btn-sm">Edit</button>
         </form>
       </td>
       <td>
-        <form action="{{ url_for('students.delete', delete_student_id=student[0]) }}" method="post">
+        <form action="{{ url_for('students.delete', delete_student_id=student[1]) }}" method="post">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-          <button type="submit" class="delete-item btn btn-outline-danger btn-sm" data-id="{{ student[0] }}">Delete</button>
+          <button type="submit" class="delete-item btn btn-outline-danger btn-sm" data-id="{{ student[1] }}">Delete</button>
         </form>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex justify-content-center align-items-center" style="min-height: 300px;">
+              <img id="modalImage" src="" alt="Image Preview" class="img-fluid" style="max-height: 80vh; max-width: 100%;">
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<script>
+  function setImageSrc(src) {
+      document.getElementById('modalImage').src = src;
+  }
+</script>
 
 <!-- This script is for the function button -->
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmDelete.js") }}'></script>

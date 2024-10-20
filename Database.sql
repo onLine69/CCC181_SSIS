@@ -24,6 +24,7 @@ CREATE TABLE `programs`(	-- table for programs
 );
 
 CREATE TABLE `students`(	-- table for students
+	`profile_version` CHAR(10) DEFAULT NULL,
 	`student_id` CHAR(9) NOT NULL,
 	`first_name` VARCHAR(50) NOT NULL,
 	`last_name` VARCHAR(50) NOT NULL,
@@ -57,11 +58,11 @@ INSERT INTO `programs` VALUE 	("BSCS", "Bachelor of Science in Computer Science"
 										("BSN", "Bachelor of Science in Nursing", "CHS");
 
 # Populate the `students` table
-INSERT INTO `students` VALUE ("2022-0378", "Caine Ivan", "Bautista", "BSCS", "3rd Year", "Male");
-INSERT INTO `students` VALUE ("2018-2041", "Joshua", "Gapol", "BSIT", "4th Year", "Gay");
-INSERT INTO `students` VALUE ("2022-0542", "John 3:16", "Ventura", "BSA", "3rd Year", "Ladyboy");
-INSERT INTO `students` VALUE ("2022-3337", "Angel", "Cabilla", "BSPsy", "3rd Year", "Likes Breb");
 INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `program_code`, `year_level`, `gender`) VALUES
+("2022-0378", "Caine Ivan", "Bautista", "BSCS", "3rd Year", "Male"),
+("2018-2041", "Joshua", "Gapol", "BSIT", "4th Year", "Gay"),
+("2022-0542", "John 3:16", "Ventura", "BSA", "3rd Year", "Ladyboy"),
+("2022-3337", "Angel", "Cabilla", "BSPsy", "3rd Year", "Likes Breb"),
 -- 10 students for BSCS
 ('2024-0001', 'John', 'Doe', 'BSCS', '1st Year', 'Male'),
 ('2024-0002', 'Jane', 'Smith', 'BSCS', '2nd Year', 'Female'),
