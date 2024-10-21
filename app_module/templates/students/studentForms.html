@@ -3,15 +3,13 @@
 {% block title %}{{ page_name }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4" style="width: 60%;">
     <div class="form-title text-center mb-4">
         <h1 class="display-4">{{ page_name }}</h1>
     </div>
 
     <!-- Form action URL is determined by whether we are adding or editing a student -->
-    <form
-        action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}"
-        method="post" class="needs-validation" enctype="multipart/form-data">
+    <form action="{{ url_for('students.edit', original_student_id=original_student_id) if original_student_id else url_for('students.add') }}" method="post" class="needs-validation" enctype="multipart/form-data">
         {{ form.csrf_token() }}
 
         <!-- Hidden input for the original student ID (for editing) -->
@@ -19,18 +17,24 @@
         <input type="hidden" id="original-student-id" name="original-student-id" value="{{ original_student_id }}">
         {% endif %}
 
+        <!-- Profile Picture -->
         <div class="mb-4 text-center">
-            <p>Profile Picture</p> <br>
-            <img id="studentImage" src="{{ profile_picture_data }}" alt="{{ form.id_number.data }}"
-                class="img-fluid img-thumbnail" height="200" width="200">
-            <input type="text" name="alt-profile" id="alt-profile" value="{{ profile_picture_data }}">
-            <div class="input-group mt-4">
-                <input type="file" id="profile-picture" name="profile-picture" accept=".jpg, .jpeg, .png" onchange="preview()">
-                <button class="btn btn-secondary" type="button" id="resetButton" onclick="resetPic()">Reset</button>
-                <button class="btn btn-danger" type="button" id="removeButton" onclick="removePic()">Remove</button>
+            <div>
+                <img id="studentImage" src="{{ profile_picture_data }}" alt="{{ form.id_number.data }}" class="img-fluid img-thumbnail" style="height: 200px; width: 200px;">
+                <p class="h3">Profile Picture</p> <br>
+            </div>
+            
+            <!-- Only for checking if the user changes the profile picture -->
+            <input type="hidden" name="alt-profile" id="alt-profile" value="{{ profile_picture_data }}" readonly>
+            <!-- For the javascript file, setting the default picture -->
+            <input type="hidden" name="default-profile" id="default-profile" value="{{ url_for('static', filename='images/icons/default_profile.png') }}" readonly>
+
+            <div class="input-group mt-3">
+                <input type="file" class="form-control" id="profile-picture" name="profile-picture" accept=".jpg, .jpeg, .png" onchange="preview(5)" title="Size must be less than 5MB">
+                <button class="btn btn-secondary" type="button" id="resetButton" onclick="resetPic()" title="Reset to the original image">Reset</button>
+                <button class="btn btn-danger" type="button" id="removeButton" onclick="removePic()" title="Remove the image">Remove</button>
             </div>
         </div>
-
 
         <!-- Form group for ID Number -->
         <div class="mb-4">
@@ -98,31 +102,6 @@
     </form>
 </div>
 
-
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmForm.js") }}'></script>
-<script>
-    const originalImageSrc = "{{ profile_picture_data }}"; // Store the original image source
-
-    function preview() {
-        studentImage.src=URL.createObjectURL(event.target.files[0]);
-        document.getElementById('alt-profile').value = studentImage.src;
-    }
-
-    function resetPic() {
-        // Clear the file input and restore the original image
-        document.getElementById('profile-picture').value = '';
-        document.getElementById('alt-profile').value = originalImageSrc;
-        document.getElementById('studentImage').src = originalImageSrc; // Restore the original image
-    }
-
-    function removePic() {
-        // Restore the default image and clear the file input
-        const defaultImage = "{{ url_for('static', filename='images/icons/default_profile.png') }}";
-        document.getElementById('profile-picture').value = '';
-        document.getElementById('alt-profile').value = defaultImage;
-        document.getElementById('studentImage').src = defaultImage; // Set to default image
-    }
-    
-
-</script>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/students/profilePictureHandler.js") }}'></script>
 {% endblock %}

@@ -108,13 +108,7 @@ def customErrorMessages(error):
 
 def uploadPicture(image_path, student_id):
     try:
-        upload_result = upload(image_path,
-                               asset_folder="SSIS/Students",
-                               public_id=student_id,
-                               invalidate=True,
-                               overwrite=True,
-                               resource_type="image",
-                               format="png")
+        upload_result = upload(image_path, asset_folder="SSIS/Students", public_id=student_id, invalidate=True, overwrite=True, resource_type="image", format="png")
         return upload_result
     except Exception as e:
         raise e

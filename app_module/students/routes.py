@@ -10,9 +10,11 @@ from app_module import mysql
 def index():    # The main display of the students
     try:
         students = displayAll() #fetch every student from the database
-        pics = {}
+
+        # Fetch their profile pictures
+        pics = {}   
         for student in students:
-            pics[student[1]] = fetchPicture(student[0], student[1])
+            pics[student[1]] = fetchPicture(student[0], student[1]) 
     except mysql.connection.Error as e:
         flash(customErrorMessages(e), "danger")
         students = []   #if there is an error, display none
@@ -27,33 +29,43 @@ def search():   # Display the searched student
     searched_item = request.args.get('param-search', '')
     try:
         if searched_item:
+            # Fetch the students
             students = searchStudent(column_name, searched_item)
-            pics = {}
+
+            # Fetch their profile pictures
+            pics = {}   
             for student in students:
                 pics[student[1]] = fetchPicture(student[0], student[1]) 
+            
             return render_template('students/students.html', pics=pics, students=students, column_name=column_name, searched_item=searched_item) 
     except mysql.connection.Error as e:
         flash(customErrorMessages(e), "danger")
-    
+        students = []   #if there is an error, display none
+        pics = {}
+
     return redirect(url_for('students.index'))  #if the searched parameter is empty, redirect to the index
     
 
 @students_bp.route('/add', methods=["POST", "GET"])
 def add():
+    # Initialize the form and preload the programs and the default profile picture
     form = StudentForm()
     form.program_code.choices = [(None, "Unenrolled")] + [(program[0], program[0] + '-' + program[1]) for program in programs()]
-
+    profile_picture_data = fetchPicture(None, None)
+    
     if request.method == "POST":
         if form.validate_on_submit():
             try:
                 profile_photo = request.files['profile-picture']
-                pic_url = None
-                # Handle file upload
-                if profile_photo:
-                    pic_url = uploadPicture(profile_photo, form.id_number.data)
+                alt_photo = request.form['alt-profile']
+                pic_url_version = None
+                
+                # If the photo is not the default
+                if profile_photo or not alt_photo == profile_picture_data:
+                    pic_url_version = uploadPicture(profile_photo, form.id_number.data)["version"]
 
                 student = (
-                    pic_url["version"] if pic_url else None,
+                    pic_url_version,
                     form.id_number.data,
                     form.first_name.data,
                     form.last_name.data,
@@ -69,7 +81,7 @@ def add():
         else:
             flash("Form validation error. Please check your input.", "warning")
 
-    return render_template('students/studentForms.html', form=form, page_name="Add Student")
+    return render_template('students/studentForms.html', form=form, profile_picture_data=profile_picture_data, page_name="Add Student")
 
 
 
@@ -87,7 +99,7 @@ def edit(original_student_id):
             form.id_number.data = original_student[1]
             form.first_name.data = original_student[2]
             form.last_name.data = original_student[3]
-            form.program_code.data = original_student[4] if original_student[4] else None
+            form.program_code.data = original_student[4]
             form.year_level.data = original_student[5]
             form.gender.data = original_student[6]
 
@@ -103,6 +115,7 @@ def edit(original_student_id):
         
         if form.validate_on_submit():
             try:
+                isSame = True
                 pic_url_version = None
                 profile_photo = request.files['profile-picture']
                 alt_photo = request.form['alt-profile']
@@ -119,8 +132,9 @@ def edit(original_student_id):
                 if profile_photo and not profile_photo == alt_photo:
                     pic_url_version = uploadPicture(profile_photo, form.id_number.data)["version"]
                 
+                # Create the Updated Version of the student
                 updated_student = (
-                    pic_url_version if pic_url_version else original_student[0],
+                    pic_url_version,
                     form.id_number.data,
                     form.first_name.data,
                     form.last_name.data,
@@ -129,8 +143,20 @@ def edit(original_student_id):
                     form.gender.data,
                     original_student_id
                 )
-                editStudent(updated_student)
-                flash(f"Student with ID '{updated_student[1]}' updated successfully!", "success")
+
+                # Check if there is any changes
+                for info_num in range(0,len(original_student)):
+                    if original_student[info_num] != updated_student[info_num]:
+                        isSame = False
+                        break
+                
+                # Only update if there is/are change/s
+                if not isSame:
+                    editStudent(updated_student)
+                    flash(f"Student with ID '{updated_student[1]}' updated successfully!", "success")
+                else:
+                    flash("Nothing has been updated.", "success")
+                
                 return redirect(url_for('students.index'))
             except mysql.connection.Error as e:
                 flash(customErrorMessages(e), "danger")

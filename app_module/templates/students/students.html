@@ -44,7 +44,7 @@
     {% for student in students %}
     <tr>
       <td><img src="{{ pics[student[1]] }}" alt="{{ student[1] }}" class="profile img-fluid img-thumbnail"
-        data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setImageSrc(this.src)"></td>
+        data-bs-toggle="modal" data-bs-target="#imageModal" onclick="document.getElementById('modalImage').src = this.src"></td>
       <td>{{ student[1] }}</td>
       <td>{{ student[2] }}</td>
       <td>{{ student[3] }}</td>
@@ -81,13 +81,6 @@
       </div>
   </div>
 </div>
-
-
-<script>
-  function setImageSrc(src) {
-      document.getElementById('modalImage').src = src;
-  }
-</script>
 
 <!-- This script is for the function button -->
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/students/confirmDelete.js") }}'></script>
