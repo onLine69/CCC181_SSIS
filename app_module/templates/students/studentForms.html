@@ -20,8 +20,8 @@
         <!-- Profile Picture -->
         <div class="mb-4 text-center">
             <div>
-                <img id="studentImage" src="{{ profile_picture_data }}" alt="{{ form.id_number.data }}" class="img-fluid img-thumbnail" style="height: 200px; width: 200px;">
-                <p class="h3">Profile Picture</p> <br>
+                <img id="student-image" src="{{ profile_picture_data }}" alt="{{ form.id_number.data }}" class="img-fluid img-thumbnail" style="height: 200px; width: 200px;">
+                <p class="h3">Profile Picture</p>
             </div>
             
             <!-- Only for checking if the user changes the profile picture -->
@@ -87,8 +87,7 @@
         <!-- Form group for Gender -->
         <div class="mb-4">
             {{ form.gender.label(class="form-label") }}
-            {{ form.gender(class="form-control {% if form.gender.errors %}is-invalid{% endif %}", placeholder="e.g.
-            ALUGBATI") }}
+            {{ form.gender(class="form-control {% if form.gender.errors %}is-invalid{% endif %}", placeholder="e.g. ALUGBATI") }}
             {% if form.gender.errors %}
             <div class="invalid-feedback">{% for error in form.gender.errors %} {{ error }} {% endfor %}</div>
             {% endif %}
@@ -96,8 +95,7 @@
 
         <!-- Submit button -->
         <div class="text-center">
-            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">{{ 'Add Student' if not
-                original_student_id else 'Update Student' }}</button>
+            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">{{ 'Add Student' if not original_student_id else 'Update Student' }}</button>
         </div>
     </form>
 </div>

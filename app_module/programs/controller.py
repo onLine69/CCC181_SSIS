@@ -1,4 +1,7 @@
+from cloudinary.uploader import upload, destroy
+from flask import url_for
 from app_module import mysql
+from config import CLOUD_NAME
 
 # Fetch every program data from the database
 def displayAll():
@@ -41,8 +44,8 @@ def add(program):
     try:
         cur = mysql.connection.cursor()
         insert_statement = """
-                        INSERT INTO `programs`(`code`, `name`, `college_code`)
-                        VALUES (%s, %s, %s);
+                        INSERT INTO `programs`(`profile_version`, `code`, `name`, `college_code`)
+                        VALUES (%s, %s, %s, %s);
                         """
         cur.execute(insert_statement, program)
         mysql.connection.commit()
@@ -58,7 +61,7 @@ def edit(program):
         cur = mysql.connection.cursor()
         edit_statement = """
                         UPDATE `programs` 
-                        SET `code` = %s, `name` = %s, `college_code` = %s 
+                        SET `profile_version` = %s, `code` = %s, `name` = %s, `college_code` = %s 
                         WHERE `code` = %s;
                         """
         cur.execute(edit_statement, program)
@@ -92,3 +95,19 @@ def customErrorMessages(error):
         return f"Program Code or Name '{value}' already exist."
     
     return f"Something is wrong, error with code '{error.args[0]}'. \n Description: '{error.args[1]}'."
+
+def uploadPicture(image_path, program_code):
+    try:
+        upload_result = upload(image_path, asset_folder="SSIS/Programs", public_id=program_code, invalidate=True, overwrite=True, resource_type="image", format="png")
+        return upload_result
+    except Exception as e:
+        raise e
+    
+def fetchPicture(profile_version, program_code):
+    return url_for('static', filename='images/icons/default_profile.png') if not profile_version else f"https://res.cloudinary.com/{CLOUD_NAME}/image/upload/v{profile_version}/{program_code}.png"
+
+def destroyPicture(program_code):
+    try:
+        destroy(program_code)
+    except Exception as e:
+        raise e

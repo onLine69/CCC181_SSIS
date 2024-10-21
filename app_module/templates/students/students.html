@@ -44,7 +44,7 @@
     {% for student in students %}
     <tr>
       <td><img src="{{ pics[student[1]] }}" alt="{{ student[1] }}" class="profile img-fluid img-thumbnail"
-        data-bs-toggle="modal" data-bs-target="#imageModal" onclick="document.getElementById('modalImage').src = this.src"></td>
+        data-bs-toggle="modal" data-bs-target="#imageModal" onclick="document.getElementById('modal-image').src = this.src"></td>
       <td>{{ student[1] }}</td>
       <td>{{ student[2] }}</td>
       <td>{{ student[3] }}</td>
@@ -76,7 +76,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body d-flex justify-content-center align-items-center" style="min-height: 300px;">
-              <img id="modalImage" src="" alt="Image Preview" class="img-fluid" style="max-height: 80vh; max-width: 100%;">
+              <img id="modal-image" src="" alt="Image Preview" class="img-fluid" style="max-height: 80vh; max-width: 100%;">
           </div>
       </div>
   </div>

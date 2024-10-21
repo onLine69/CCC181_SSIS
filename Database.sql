@@ -8,6 +8,7 @@ USE `ssis_web_database`;
 
 #Create the tables
 CREATE TABLE `colleges`(	-- table for colleges
+	`profile_version` CHAR(10) DEFAULT NULL,
 	`code` VARCHAR(5) NOT NULL,
 	`name` VARCHAR(100) NOT NULL,
 	CONSTRAINT `pk_college_code` PRIMARY KEY(`code`),
@@ -15,6 +16,7 @@ CREATE TABLE `colleges`(	-- table for colleges
 );
 
 CREATE TABLE `programs`(	-- table for programs
+	`profile_version` CHAR(10) DEFAULT NULL,
 	`code` VARCHAR(10) NOT NULL,
    `name` VARCHAR(100) NOT NULL,
    `college_code` VARCHAR(5) NOT NULL,	-- it is not possible to have a program without a college
@@ -37,7 +39,7 @@ CREATE TABLE `students`(	-- table for students
 );
 
 # Populate the `colleges` table 
-INSERT INTO `colleges` VALUES ("CCS", "College of Computer Studies"),
+INSERT INTO `colleges` (`code`, `name`) VALUES ("CCS", "College of Computer Studies"),
 										("COE", "College of Enginnering"),
 										("CEBA", "College of Economics, Business and Accountancy"),
 										("CSM", "College of Science and Mathematics"),
@@ -46,7 +48,7 @@ INSERT INTO `colleges` VALUES ("CCS", "College of Computer Studies"),
 										("CHS", "College of Health Sciences");
 
 # Populate the `programs` table																				
-INSERT INTO `programs` VALUE 	("BSCS", "Bachelor of Science in Computer Science", "CCS"),
+INSERT INTO `programs` (`code`, `name`, `college_code`) VALUE 	("BSCS", "Bachelor of Science in Computer Science", "CCS"),
 										("BSCA", "Bachelor of Science in Computer Applications", "CCS"),
 										("BSIT", "Bachelor of Science in Information Technology", "CCS"),
 										("BSIS", "Bachelor of Science in Information Systems", "CCS"),

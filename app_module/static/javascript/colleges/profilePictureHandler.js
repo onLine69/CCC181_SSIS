@@ -2,7 +2,7 @@ const defaultImage = document.getElementById('default-profile').value;
 const originalImageSrc = document.getElementById('alt-profile').value; // Store the original image source
 
 var file_input = document.getElementById('profile-picture');
-var image_profile = document.getElementById('student-image');
+var image_profile = document.getElementById('college-image');
 var alt_path = document.getElementById('alt-profile');
 
 function preview(size) {

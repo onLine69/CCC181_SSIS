@@ -19,6 +19,7 @@ def index():    # The main display of the students
         flash(customErrorMessages(e), "danger")
         students = []   #if there is an error, display none
         pics = {}
+
     return render_template('students/students.html', pics=pics, students=students) #render the template with the data
 
 
@@ -50,8 +51,8 @@ def search():   # Display the searched student
 def add():
     # Initialize the form and preload the programs and the default profile picture
     form = StudentForm()
-    form.program_code.choices = [(None, "Unenrolled")] + [(program[0], program[0] + '-' + program[1]) for program in programs()]
-    profile_picture_data = fetchPicture(None, None)
+    form.program_code.choices = [(None, "Unenrolled")] + [(program[1], program[1] + '-' + program[2]) for program in programs()]
+    profile_picture_data = url_for('static', filename='images/icons/default_profile.png')
     
     if request.method == "POST":
         if form.validate_on_submit():
@@ -91,27 +92,30 @@ def edit(original_student_id):
     original_photo_id = fetchPicture(original_student[0], original_student[1])
 
     if request.method == "GET":
-        if original_student:
-            form = StudentForm()
-            form.program_code.choices = [(None, "Unenrolled")] + [(program[0], program[0] + '-' + program[1]) for program in programs()]
+        try:
+            if original_student:
+                form = StudentForm()
+                form.program_code.choices = [(None, "Unenrolled")] + [(program[1], program[1] + '-' + program[2]) for program in programs()]
 
-            profile_picture_data = original_photo_id
-            form.id_number.data = original_student[1]
-            form.first_name.data = original_student[2]
-            form.last_name.data = original_student[3]
-            form.program_code.data = original_student[4]
-            form.year_level.data = original_student[5]
-            form.gender.data = original_student[6]
+                profile_picture_data = original_photo_id
+                form.id_number.data = original_student[1]
+                form.first_name.data = original_student[2]
+                form.last_name.data = original_student[3]
+                form.program_code.data = original_student[4]
+                form.year_level.data = original_student[5]
+                form.gender.data = original_student[6]
 
-            return render_template('students/studentForms.html', form=form, profile_picture_data=profile_picture_data,
-                                   original_student_id=original_student_id, page_name="Edit Student")
-        else:
-            flash(f"Invalid URL or student ID '{original_student_id}' not found.", "danger")
+                return render_template('students/studentForms.html', form=form, profile_picture_data=profile_picture_data, original_student_id=original_student_id, page_name="Edit Student")
+            else:
+                flash(f"Invalid URL or student ID '{original_student_id}' not found.", "danger")
+        except mysql.connection.Error as e:
+            flash(customErrorMessages(e), "danger")
+        
             return redirect(url_for('students.index'))
 
     if request.method == "POST":
         form = StudentForm(request.form)
-        form.program_code.choices = [(None, "Unenrolled")] + [(program[0], program[0] + '-' + program[1]) for program in programs()]
+        form.program_code.choices = [(None, "Unenrolled")] + [(program[1], program[1] + '-' + program[2]) for program in programs()]
         
         if form.validate_on_submit():
             try:
@@ -162,8 +166,8 @@ def edit(original_student_id):
                 flash(customErrorMessages(e), "danger")
         else:
             flash("Form validation error. Please check your input.", "warning")
-
-    return render_template('students/studentForms.html', form=form, original_student_id=original_student_id, page_name="Edit Student")
+            
+        return render_template('students/studentForms.html', form=form, original_student_id=original_student_id, page_name="Edit Student")
     
 
 @students_bp.route('/delete/<delete_student_id>', methods=["POST", "GET"])

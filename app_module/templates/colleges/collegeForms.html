@@ -11,13 +11,32 @@
     <!-- Form action URL is determined by whether we are adding or editing a student -->
     <form
         action="{{ url_for('colleges.edit', original_college_code=original_college_code) if original_college_code else url_for('colleges.add') }}"
-        method="post">
+        method="post" class="needs-validation" enctype="multipart/form-data">
         {{ form.csrf_token() }}
 
         <!-- Hidden input for the original student ID (for editing) -->
         {% if original_program_code %}
         <input type="hidden" id="original-college-code" name="original-college-code" value="{{ original_college_code }}">
         {% endif %}
+
+            <!-- Profile Picture -->
+            <div class="mb-4 text-center">
+                <div>
+                    <img id="college-image" src="{{ profile_picture_data }}" alt="{{ form.college_code.data }}" class="img-fluid img-thumbnail" style="height: 200px; width: 200px;">
+                    <p class="h3">Profile Picture</p>
+                </div>
+                
+                <!-- Only for checking if the user changes the profile picture -->
+                <input type="hidden" name="alt-profile" id="alt-profile" value="{{ profile_picture_data }}" readonly>
+                <!-- For the javascript file, setting the default picture -->
+                <input type="hidden" name="default-profile" id="default-profile" value="{{ url_for('static', filename='images/icons/default_profile.png') }}" readonly>
+
+                <div class="input-group mt-3">
+                    <input type="file" class="form-control" id="profile-picture" name="profile-picture" accept=".jpg, .jpeg, .png" onchange="preview(5)" title="Size must be less than 5MB">
+                    <button class="btn btn-secondary" type="button" id="resetButton" onclick="resetPic()" title="Reset to the original image">Reset</button>
+                    <button class="btn btn-danger" type="button" id="removeButton" onclick="removePic()" title="Remove the image">Remove</button>
+                </div>
+            </div>
 
         <!-- Form group for College Code -->
         <div class="mb-3">
@@ -47,4 +66,5 @@
 </div>
 
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/colleges/confirmForm.js") }}'></script>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/colleges/profilePictureHandler.js") }}'></script>
 {% endblock %}

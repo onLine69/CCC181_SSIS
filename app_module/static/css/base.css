@@ -125,8 +125,8 @@ main {
 .profile {
     height: 50px;
     width: 50px;
-    border-radius: 50%;  /* Makes the image circular */
-    object-fit: cover;    /* Ensures the image covers the area without distortion */
+    border-radius: 50%;  
+    object-fit: cover;    
     cursor: pointer;
 }
 

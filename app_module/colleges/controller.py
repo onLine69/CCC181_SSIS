@@ -1,3 +1,7 @@
+from cloudinary.uploader import upload, destroy
+from flask import url_for
+from app_module import mysql
+from config import CLOUD_NAME
 from app_module import mysql
 
 # Fetch every college data from the database
@@ -41,8 +45,8 @@ def add(college):
     try:
         cur = mysql.connection.cursor()
         insert_statement = """
-                        INSERT INTO `colleges`(`code`, `name`)
-                        VALUES (%s, %s);
+                        INSERT INTO `colleges`(`profile_version`, `code`, `name`)
+                        VALUES (%s, %s, %s);
                         """
         cur.execute(insert_statement, college)
         mysql.connection.commit()
@@ -58,7 +62,7 @@ def edit(college):
         cur = mysql.connection.cursor()
         edit_statement = """
                     UPDATE `colleges` 
-                    SET `code` = %s, `name` = %s
+                    SET `profile_version` = %s, `code` = %s, `name` = %s
                     WHERE `code` = %s;
                     """
         cur.execute(edit_statement, college)
@@ -91,3 +95,20 @@ def customErrorMessages(error):
         return f"College Code or Name '{value}' already exist."
     
     return f"Something is wrong, error with code '{error.args[0]}'. \n Description: '{error.args[1]}'."
+
+def uploadPicture(image_path, college_code):
+    try:
+        upload_result = upload(image_path, asset_folder="SSIS/Colleges", public_id=college_code, invalidate=True, overwrite=True, resource_type="image", format="png")
+        return upload_result
+    except Exception as e:
+        raise e
+    
+def fetchPicture(profile_version, college_code):
+    return url_for('static', filename='images/icons/default_profile.png') if not profile_version else f"https://res.cloudinary.com/{CLOUD_NAME}/image/upload/v{profile_version}/{college_code}.png"
+
+def destroyPicture(college_code):
+    try:
+        destroy(college_code)
+    except Exception as e:
+        raise e
+    

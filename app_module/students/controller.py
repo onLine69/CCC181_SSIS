@@ -1,6 +1,4 @@
-import cloudinary
 from cloudinary.uploader import upload, destroy
-from cloudinary.api import resource
 from flask import url_for
 from app_module import mysql
 from config import CLOUD_NAME
@@ -117,4 +115,7 @@ def fetchPicture(profile_version, student_id):
     return url_for('static', filename='images/icons/default_profile.png') if not profile_version else f"https://res.cloudinary.com/{CLOUD_NAME}/image/upload/v{profile_version}/{student_id}.png"
 
 def destroyPicture(student_id):
-    destroy(student_id)
+    try:
+        destroy(student_id)
+    except Exception as e:
+        raise e

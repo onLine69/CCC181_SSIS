@@ -9,13 +9,32 @@
     </div>
 
     <!-- Form action URL is determined by whether we are adding or editing a student -->
-    <form action="{{ url_for('programs.edit', original_program_code=original_program_code) if original_program_code else url_for('programs.add') }}" method="post">
+    <form action="{{ url_for('programs.edit', original_program_code=original_program_code) if original_program_code else url_for('programs.add') }}" method="post" class="needs-validation" enctype="multipart/form-data">
         {{ form.csrf_token() }}
 
         <!-- Hidden input for the original program code (for editing) -->
         {% if original_program_code %}
             <input type="hidden" id="original-program-code" name="original-program-code" value="{{ original_program_code }}">
         {% endif %}
+
+        <!-- Profile Picture -->
+        <div class="mb-4 text-center">
+            <div>
+                <img id="program-image" src="{{ profile_picture_data }}" alt="{{ form.program_code.data }}" class="img-fluid img-thumbnail" style="height: 200px; width: 200px;">
+                <p class="h3">Profile Picture</p>
+            </div>
+            
+            <!-- Only for checking if the user changes the profile picture -->
+            <input type="hidden" name="alt-profile" id="alt-profile" value="{{ profile_picture_data }}" readonly>
+            <!-- For the javascript file, setting the default picture -->
+            <input type="hidden" name="default-profile" id="default-profile" value="{{ url_for('static', filename='images/icons/default_profile.png') }}" readonly>
+
+            <div class="input-group mt-3">
+                <input type="file" class="form-control" id="profile-picture" name="profile-picture" accept=".jpg, .jpeg, .png" onchange="preview(5)" title="Size must be less than 5MB">
+                <button class="btn btn-secondary" type="button" id="resetButton" onclick="resetPic()" title="Reset to the original image">Reset</button>
+                <button class="btn btn-danger" type="button" id="removeButton" onclick="removePic()" title="Remove the image">Remove</button>
+            </div>
+        </div>
 
         <!-- Form group for Program Code -->
         <div class="mb-3">
@@ -52,4 +71,5 @@
 </div>
 
 <script type="text/javascript" src='{{ url_for("static", filename="javascript/programs/confirmForm.js") }}'></script>
+<script type="text/javascript" src='{{ url_for("static", filename="javascript/programs/profilePictureHandler.js") }}'></script>
 {% endblock %}
