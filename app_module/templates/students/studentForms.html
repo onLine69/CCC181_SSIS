@@ -94,8 +94,13 @@
         </div>
 
         <!-- Submit button -->
-        <div class="text-center">
-            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">{{ 'Add Student' if not original_student_id else 'Update Student' }}</button>
+        <div class="text-center d-flex justify-content-start gap-3">
+            <button type="button" id="go-back" class="btn btn-secondary btn-lg" onclick='window.location.href = "{{ url_for('students.index') }}"'>
+                Go Back
+            </button>
+            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">
+                {{ 'Add Student' if not original_student_id else 'Update Student' }}
+            </button>
         </div>
     </form>
 </div>

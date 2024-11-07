@@ -59,8 +59,14 @@
         </div>
 
         <!-- Submit button -->
-        <div class="mb-3">
-            <button type="submit" id="submit-form" class="btn btn-primary">{{ 'Add College' if not original_college_code else 'Update College' }}</button>
+         <!-- Submit button -->
+        <div class="text-center d-flex justify-content-start gap-3">
+            <button type="button" id="go-back" class="btn btn-secondary btn-lg" onclick='window.location.href = "{{ url_for('colleges.index') }}"'>
+                Go Back
+            </button>
+            <button type="submit" id="submit-form" class="btn btn-primary btn-lg">
+                {{ 'Add College' if not original_college_code else 'Update College' }}
+            </button>
         </div>
     </form>
 </div>
