@@ -8,22 +8,40 @@ from config import CLOUD_NAME
 def displayAll():
     try:
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM `students` ORDER BY `last_name`, `first_name` ASC;")
+        cur.execute("""SELECT s.profile_version, s.student_id, s.first_name, s.last_name, s.program_code, s.year_level, s.gender, c.`name` 
+                    FROM `students` AS s LEFT JOIN `programs` AS p 
+                    ON s.`program_code` = p.`code` LEFT JOIN `colleges` AS c 
+                    ON p.`college_code` = c.`code` 
+                    ORDER BY `last_name`, `first_name` ASC;
+        """
+        )
         return cur.fetchall()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error
         raise e
     finally:
         cur.close()  # Ensure the cursor is closed
+
     
 # Fetch the students according to the search parameters
 def search(column, param):
     try:
+        print(column, "|", param)
         cur = mysql.connection.cursor()
         if param == "Unenrolled":
-            cur.execute(f"SELECT * FROM `students` WHERE {column} IS NULL;")
-        else:    
-            cur.execute(f"SELECT * FROM `students` WHERE {column} COLLATE utf8mb4_bin LIKE '%{param}%';")
+                cur.execute(f"SELECT * FROM `students` WHERE {column} IS NULL;")
+        else:
+            if column == "program_code":
+                cur.execute(f"""SELECT s.profile_version, s.student_id, s.first_name, s.last_name, s.program_code, s.year_level, s.gender, c.`name` 
+                        FROM `students` AS s LEFT JOIN `programs` AS p 
+                        ON s.`program_code` = p.`code` LEFT JOIN `colleges` AS c 
+                        ON p.`college_code` = c.`code`
+                        WHERE s.`program_code` LIKE '%{param}%' OR c.`name` LIKE '%{param}%'
+                        ORDER BY `last_name`, `first_name` ASC
+                """
+                )
+            else:
+                cur.execute(f"SELECT * FROM `students` WHERE {column} COLLATE utf8mb4_bin LIKE '%{param}%';")
         return cur.fetchall()
     except mysql.connection.Error as e:
         mysql.connection.rollback()  # Rollback in case of error

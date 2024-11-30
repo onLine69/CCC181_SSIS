@@ -48,7 +48,7 @@
       <td>{{ student[1] }}</td>
       <td>{{ student[2] }}</td>
       <td>{{ student[3] }}</td>
-      <td>{{ student[4] if student[4] else 'Unenrolled' }}</td>
+      <td>{% if student[4] %} {{ student[4] }} ({{ student[7] }}) {% else %} Unenrolled {% endif %}</td>
       <td>{{ student[5] }}</td>
       <td>{{ student[6] }}</td>
       <td>
